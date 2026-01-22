@@ -26,7 +26,8 @@
                     </div>
                     <h3 class="font-bold text-xl text-slate-800 mb-2">Alamat Kantor</h3>
                     <p class="text-slate-500 leading-relaxed">
-                        {{ $profile->address ?? 'Alamat Desa Belum Diisi' }}
+                        {{-- FIX: Tambah tanda tanya --}}
+                        {{ $profile?->address ?? 'Alamat Desa Belum Diisi' }}
                     </p>
                 </div>
 
@@ -41,11 +42,13 @@
                     <div class="space-y-2">
                         <p class="text-slate-500">
                             <span class="font-bold block text-slate-700">Telepon / WhatsApp:</span>
-                            {{ $profile->phone ?? '-' }}
+                            {{-- FIX: Tambah tanda tanya --}}
+                            {{ $profile?->phone ?? '-' }}
                         </p>
                         <p class="text-slate-500">
                             <span class="font-bold block text-slate-700">Email:</span>
-                            {{ $profile->email ?? '-' }}
+                            {{-- FIX: Tambah tanda tanya --}}
+                            {{ $profile?->email ?? '-' }}
                         </p>
                     </div>
                 </div>
@@ -73,9 +76,9 @@
                 {{-- Map --}}
                 <div class="bg-white p-2 rounded-3xl shadow-lg border border-gray-200">
                     <div class="rounded-2xl overflow-hidden h-96 relative">
-                        {{-- Ganti src iframe di bawah ini dengan Embed Map asli desa Anda --}}
+                        {{-- FIX: Tambah tanda tanya dan default value --}}
                         <iframe
-                            src="https://maps.google.com/maps?q={{ urlencode(($profile->village_name ?? 'Desa') . ' Tasikmalaya') }}&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                            src="https://maps.google.com/maps?q={{ urlencode(($profile?->village_name ?? 'Desa') . ' Tasikmalaya') }}&t=&z=13&ie=UTF8&iwloc=&output=embed"
                             width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
                         </iframe>
                     </div>
@@ -84,18 +87,21 @@
                 {{-- Text Content --}}
                 <div>
                     <span class="text-blue-600 font-bold tracking-widest text-sm uppercase mb-2 block">Lokasi Kami</span>
+                    {{-- FIX: Tambah tanda tanya --}}
                     <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-800 mb-6">Berkunjung ke Desa
-                        {{ $profile->village_name ?? 'Kami' }}</h2>
+                        {{ $profile?->village_name ?? 'Kami' }}</h2>
                     <p class="text-slate-600 text-lg leading-relaxed mb-6">
                         Kantor Desa kami terletak strategis di pusat pemukiman warga. Kami menyambut baik kedatangan Anda
                         untuk keperluan administrasi, pelayanan publik, maupun kunjungan dinas.
                     </p>
                     <div class="flex gap-4">
-                        <a href="https://maps.google.com/?q={{ $profile->village_name ?? 'Desa' }}" target="_blank"
+                        {{-- FIX: Tambah tanda tanya --}}
+                        <a href="https://maps.google.com/?q={{ $profile?->village_name ?? 'Desa' }}" target="_blank"
                             class="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition shadow-lg">
                             Buka di Google Maps
                         </a>
-                        <a href="https://wa.me/{{ $profile->phone ?? '' }}" target="_blank"
+                        {{-- FIX: Tambah tanda tanya --}}
+                        <a href="https://wa.me/{{ $profile?->phone ?? '' }}" target="_blank"
                             class="bg-green-100 text-green-700 px-6 py-3 rounded-xl font-bold hover:bg-green-200 transition">
                             Chat WhatsApp
                         </a>

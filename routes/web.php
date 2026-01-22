@@ -27,6 +27,9 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/profil', 'profile')->name('public.profile');
     Route::get('/kontak', 'contact')->name('public.contact');
+
+    // Tambahkan di bawah route home, atau di dalam group Public Routes
+    Route::get('/pencarian', [PublicController::class, 'search'])->name('public.search');
     
     // Group Pemerintahan
     Route::prefix('pemerintahan')->group(function() {

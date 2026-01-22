@@ -12,7 +12,8 @@
 
     <div class="container mx-auto px-4 py-16">
         <div class="bg-white p-6 lg:p-10 rounded-3xl shadow-xl border border-gray-100">
-            @if ($profile->structure_image_path)
+            {{-- FIX: Tambah tanda tanya agar aman --}}
+            @if ($profile?->structure_image_path)
                 <img src="{{ asset('storage/' . $profile->structure_image_path) }}"
                     class="w-full h-auto rounded-xl shadow-sm">
                 <div class="mt-8 text-center">

@@ -1,155 +1,142 @@
 @extends('layouts.app')
 
+{{-- META DATA DINAMIS --}}
 @section('title', $post->title)
+@section('meta_description', Str::limit(strip_tags($post->content), 150))
+@if ($post->image_path)
+    @section('meta_image', asset('storage/' . $post->image_path))
+@endif
 
 @section('content')
+    {{-- HEADER GAMBAR (Parallax Effect) --}}
+    <div class="relative h-[400px] md:h-[500px] overflow-hidden">
+        <div class="absolute inset-0 bg-slate-900/50 z-10"></div>
+        @if ($post->image_path)
+            <img src="{{ asset('storage/' . $post->image_path) }}" class="w-full h-full object-cover fixed-parallax">
+        @else
+            <div class="w-full h-full bg-slate-800 flex items-center justify-center">
+                <span class="text-white font-bold">No Image Available</span>
+            </div>
+        @endif
 
-    {{-- BREADCRUMB HEADER --}}
-    <div class="bg-slate-900 pt-10 pb-20 relative">
-        <div class="container mx-auto px-4 lg:px-8 text-center relative z-10">
-
-            {{-- LOGIKA TOMBOL KEMBALI DINAMIS --}}
-            @if ($post->category->name === 'Pengumuman')
-                <a href="{{ route('public.announcements') }}"
-                    class="inline-flex items-center text-orange-300 hover:text-white mb-4 text-sm font-bold transition">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
-                        </path>
-                    </svg>
-                    Kembali ke Pengumuman
-                </a>
-            @else
-                <a href="{{ route('public.news') }}"
-                    class="inline-flex items-center text-blue-300 hover:text-white mb-4 text-sm font-bold transition">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    Kembali ke Berita
-                </a>
-            @endif
-
-            <h1 class="text-2xl lg:text-4xl font-extrabold text-white leading-tight max-w-4xl mx-auto mb-6">
-                {{ $post->title }}
-            </h1>
-
-            <div class="flex flex-wrap justify-center items-center gap-4 text-sm text-slate-400">
-                <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                    {{ $post->created_at->format('d F Y') }}
-                </span>
-                <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+        <div
+            class="absolute bottom-0 left-0 w-full z-20 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent pt-32 pb-10">
+            <div class="container mx-auto px-4 lg:px-8 max-w-4xl">
                 <span
-                    class="flex items-center font-bold {{ $post->category->name === 'Pengumuman' ? 'text-orange-400' : 'text-emerald-400' }}">
-                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z">
-                        </path>
-                    </svg>
-                    {{ $post->category->name }}
+                    class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                    {{ $post->category?->name ?? 'Berita' }}
                 </span>
+                <h1 class="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4 shadow-sm">
+                    {{ $post->title }}
+                </h1>
+                <div class="flex items-center gap-6 text-slate-300 text-sm font-medium">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        {{ $post->created_at->translatedFormat('d F Y, H:i') }} WIB
+                    </span>
+                    <span class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        Admin Desa
+                    </span>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container mx-auto px-4 lg:px-8 -mt-12 pb-20 relative z-20">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    <div class="bg-white border-t border-gray-100">
+        <div class="container mx-auto px-4 lg:px-8 py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-            {{-- KOLOM KIRI: ARTIKEL UTAMA --}}
-            <div class="lg:col-span-2">
-                <article class="bg-white rounded-3xl p-6 lg:p-10 shadow-xl shadow-slate-200/50 border border-gray-100">
-
-                    {{-- Featured Image --}}
-                    @if ($post->image_path)
-                        <div class="rounded-2xl overflow-hidden mb-8 shadow-sm">
-                            <img src="{{ asset('storage/' . $post->image_path) }}" class="w-full h-auto object-cover">
-                        </div>
-                    @endif
-
-                    {{-- Isi Berita (Typography Plugin Style) --}}
-                    <div
-                        class="prose prose-lg prose-slate max-w-none prose-headings:font-bold prose-a:text-blue-600 hover:prose-a:text-blue-500 prose-img:rounded-xl">
+                {{-- KONTEN UTAMA --}}
+                <div class="lg:col-span-8">
+                    <article class="prose prose-lg prose-slate max-w-none text-slate-700 leading-relaxed">
                         {!! nl2br(e($post->content)) !!}
-                    </div>
+                    </article>
 
-                    {{-- Share Section (Dummy) --}}
+                    {{-- Tombol Share (Opsional) --}}
                     <div class="mt-12 pt-8 border-t border-gray-100">
-                        <h4 class="font-bold text-slate-800 mb-4">Bagikan Informasi:</h4>
+                        <h4 class="font-bold text-slate-800 mb-4">Bagikan Berita Ini:</h4>
                         <div class="flex gap-2">
-                            <button
-                                class="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-blue-700 transition">Facebook</button>
-                            <button
-                                class="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-green-600 transition">WhatsApp</button>
-                            <button
-                                class="bg-sky-500 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-sky-600 transition">Twitter</button>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            {{-- KOLOM KANAN: SIDEBAR BERITA TERBARU --}}
-            <div class="lg:col-span-1">
-                <div class="sticky top-24">
-                    <div class="bg-white rounded-3xl p-6 shadow-lg shadow-slate-200/50 border border-gray-100">
-                        <h3 class="font-bold text-lg text-slate-800 mb-6 pb-4 border-b border-gray-100">
-                            Informasi Terbaru Lainnya
-                        </h3>
-
-                        <div class="space-y-6">
-                            @foreach ($recentPosts as $recent)
-                                @if ($recent->id != $post->id)
-                                    <a href="{{ route('public.news.show', $recent->slug) }}"
-                                        class="group flex items-start gap-4">
-                                        {{-- Gambar Kecil --}}
-                                        <div
-                                            class="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 border border-gray-100">
-                                            @if ($recent->image_path)
-                                                <img src="{{ asset('storage/' . $recent->image_path) }}"
-                                                    class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
-                                            @else
-                                                <div
-                                                    class="w-full h-full flex items-center justify-center text-slate-300 text-xs font-bold">
-                                                    No Img</div>
-                                            @endif
-                                        </div>
-
-                                        {{-- Teks --}}
-                                        <div>
-                                            <span
-                                                class="text-[10px] font-bold uppercase mb-1 block {{ $recent->category->name === 'Pengumuman' ? 'text-orange-600' : 'text-blue-600' }}">
-                                                {{ $recent->category->name }}
-                                            </span>
-                                            <h4
-                                                class="text-sm font-bold text-slate-800 leading-snug group-hover:text-blue-600 transition line-clamp-2">
-                                                {{ $recent->title }}
-                                            </h4>
-                                            <span
-                                                class="text-xs text-slate-400 mt-2 block">{{ $recent->created_at->diffForHumans() }}</span>
-                                        </div>
-                                    </a>
-                                @endif
-                            @endforeach
-                        </div>
-
-                        <div class="mt-8 pt-6 border-t border-gray-100 text-center">
-                            @if ($post->category->name === 'Pengumuman')
-                                <a href="{{ route('public.announcements') }}"
-                                    class="text-sm font-bold text-orange-600 hover:underline">Lihat Semua Pengumuman
-                                    &rarr;</a>
-                            @else
-                                <a href="{{ route('public.news') }}"
-                                    class="text-sm font-bold text-blue-600 hover:underline">Lihat Semua Berita &rarr;</a>
-                            @endif
+                            <a href="https://wa.me/?text={{ urlencode($post->title . ' - ' . url()->current()) }}"
+                                target="_blank"
+                                class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-600 transition flex items-center gap-2">
+                                WhatsApp
+                            </a>
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}" target="_blank"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-blue-700 transition flex items-center gap-2">
+                                Facebook
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
 
+                {{-- SIDEBAR --}}
+                <div class="lg:col-span-4 space-y-10">
+
+                    {{-- Berita Terbaru Widget --}}
+                    <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                        <h3
+                            class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 border-l-4 border-blue-600 pl-3">
+                            Berita Lainnya
+                        </h3>
+                        <div class="space-y-6">
+                            @foreach ($recentPosts as $recent)
+                                <a href="{{ route('public.news.show', $recent->slug) }}"
+                                    class="group flex gap-4 items-start">
+                                    <div class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-slate-200">
+                                        @if ($recent->image_path)
+                                            <img src="{{ asset('storage/' . $recent->image_path) }}"
+                                                class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                        @else
+                                            <div
+                                                class="w-full h-full flex items-center justify-center text-xs text-slate-400">
+                                                No Img</div>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <h4
+                                            class="text-sm font-bold text-slate-800 leading-snug mb-1 group-hover:text-blue-600 transition line-clamp-2">
+                                            {{ $recent->title }}
+                                        </h4>
+                                        <span
+                                            class="text-xs text-slate-400">{{ $recent->created_at->diffForHumans() }}</span>
+                                    </div>
+                                </a>
+                            @endforeach
+                        </div>
+                        <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                            <a href="{{ route('public.news') }}"
+                                class="text-sm font-bold text-blue-600 hover:text-blue-700">Lihat Semua Berita &rarr;</a>
+                        </div>
+                    </div>
+
+                    {{-- Kategori Widget --}}
+                    @if (isset($categories) && $categories->count() > 0)
+                        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                            <h3
+                                class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 border-l-4 border-emerald-500 pl-3">
+                                Kategori
+                            </h3>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach ($categories as $cat)
+                                    <span
+                                        class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-emerald-100 hover:text-emerald-700 transition cursor-default">
+                                        {{ $cat->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
         </div>
     </div>
-
 @endsection

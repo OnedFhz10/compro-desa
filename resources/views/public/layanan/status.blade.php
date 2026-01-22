@@ -1,103 +1,96 @@
 @extends('layouts.app')
-@section('title', 'Cek Status Layanan')
+
+@section('title', 'Status Layanan')
+
 @section('content')
-
-    <div class="bg-slate-900 py-20 text-center">
-        <h1 class="text-4xl font-extrabold text-white mb-2">Cek Status Pengajuan</h1>
-        <p class="text-slate-300">Pantau progres permohonan surat atau pengaduan Anda.</p>
-    </div>
-
-    <div class="container mx-auto px-4 py-16 min-h-[50vh]">
-
-        {{-- Search Box --}}
-        <div class="max-w-xl mx-auto mb-12">
-            <form action="{{ route('public.layanan.status') }}" method="GET" class="relative">
-                <input type="text" name="kode" value="{{ $search }}"
-                    class="w-full bg-white border-2 border-gray-200 rounded-full px-6 py-4 pr-32 focus:outline-none focus:border-blue-500 shadow-sm text-lg"
-                    placeholder="Masukkan Kode Resi / Tiket..." required>
-                <button type="submit"
-                    class="absolute right-2 top-2 bottom-2 bg-blue-600 text-white px-6 rounded-full font-bold hover:bg-blue-700 transition">
-                    Lacak
-                </button>
-            </form>
-            @if (session('success'))
-                <div class="mt-4 p-4 bg-green-100 text-green-700 rounded-xl border border-green-200 text-center font-bold">
-                    {{ session('success') }}
-                </div>
-            @endif
+    <section class="bg-slate-900 pt-32 pb-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-3xl lg:text-5xl font-extrabold text-white mb-4">Cek Status Pengajuan</h1>
+            <p class="text-slate-400">Pantau progres permohonan surat Anda secara realtime.</p>
         </div>
+    </section>
 
-        {{-- HASIL PENCARIAN --}}
-        @if ($search)
-            <div class="max-w-2xl mx-auto">
-                @if ($resultSurat)
-                    <div class="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-blue-500">
-                        <span
-                            class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block">Permohonan
-                            Surat</span>
-                        <h3 class="text-2xl font-bold text-slate-800 mb-1">{{ $resultSurat->letter_type }}</h3>
-                        <p class="text-slate-500 mb-6">Kode: <span
-                                class="font-mono font-bold text-slate-800">{{ $resultSurat->tracking_code }}</span></p>
+    <section class="py-16 bg-gray-50 min-h-[50vh]">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="max-w-3xl mx-auto">
 
-                        <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl">
-                            <span class="text-sm font-bold text-slate-600">Status Saat Ini:</span>
-                            @if ($resultSurat->status == 'pending')
-                                <span class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-lg font-bold">Menunggu
-                                    Verifikasi</span>
-                            @elseif($resultSurat->status == 'proses')
-                                <span class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-bold animate-pulse">Sedang
-                                    Diproses</span>
-                            @elseif($resultSurat->status == 'selesai')
-                                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-bold">Selesai / Dapat
-                                    Diambil</span>
-                            @else
-                                <span class="bg-red-100 text-red-700 px-4 py-2 rounded-lg font-bold">Ditolak</span>
-                            @endif
-                        </div>
-                        <p class="text-xs text-slate-400 mt-4 text-center">Silakan datang ke kantor desa jika status sudah
-                            Selesai.</p>
-                    </div>
-                @elseif($resultAduan)
-                    <div class="bg-white p-8 rounded-3xl shadow-xl border-l-8 border-orange-500">
-                        <span
-                            class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-xs font-bold uppercase mb-4 inline-block">Laporan
-                            Pengaduan</span>
-                        <h3 class="text-2xl font-bold text-slate-800 mb-1">{{ $resultAduan->category }}</h3>
-                        <p class="text-slate-500 mb-6">Kode: <span
-                                class="font-mono font-bold text-slate-800">{{ $resultAduan->ticket_code }}</span></p>
+                {{-- Form Pencarian Ulang --}}
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-10">
+                    <form action="{{ route('public.layanan.status') }}" method="GET" class="flex gap-4">
+                        <input type="text" name="kode" value="{{ request('kode') }}"
+                            placeholder="Masukkan Kode Resi / NIK..."
+                            class="flex-1 border border-slate-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition">
+                            Cek
+                        </button>
+                    </form>
+                </div>
 
-                        <div class="mb-4">
-                            <h4 class="font-bold text-sm text-slate-700">Isi Laporan:</h4>
-                            <p class="text-slate-600 italic">"{{ $resultAduan->description }}"</p>
-                        </div>
-
-                        <div class="bg-gray-50 p-4 rounded-xl">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-bold text-slate-600">Status:</span>
-                                @if ($resultAduan->status == 'pending')
-                                    <span class="text-yellow-600 font-bold">Diterima</span>
-                                @elseif($resultAduan->status == 'proses')
-                                    <span class="text-blue-600 font-bold">Sedang Ditindaklanjuti</span>
-                                @else
-                                    <span class="text-green-600 font-bold">Selesai Ditangani</span>
-                                @endif
+                {{-- HASIL PENCARIAN --}}
+                @if (isset($trackResult))
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-xl border border-blue-100">
+                        <div class="bg-blue-600 p-6 text-white flex justify-between items-center">
+                            <div>
+                                <span class="text-blue-200 text-xs font-bold uppercase tracking-wider">Jenis Surat</span>
+                                <h3 class="text-xl font-bold">{{ $trackResult->letter_type }}</h3>
                             </div>
-                            @if ($resultAduan->admin_response)
-                                <div class="mt-4 pt-4 border-t border-gray-200">
-                                    <span class="text-xs font-bold text-slate-400 uppercase">Tanggapan Admin:</span>
-                                    <p class="text-slate-800 font-medium mt-1">{{ $resultAduan->admin_response }}</p>
+                            <div class="text-right">
+                                <span class="text-blue-200 text-xs font-bold uppercase tracking-wider">Tanggal
+                                    Pengajuan</span>
+                                <p class="font-medium">
+                                    {{ \Carbon\Carbon::parse($trackResult->created_at)->translatedFormat('d F Y') }}</p>
+                            </div>
+                        </div>
+
+                        <div class="p-8">
+                            {{-- Timeline Status --}}
+                            <div class="relative pl-8 border-l-2 border-slate-200 space-y-8">
+
+                                {{-- Status: Diajukan --}}
+                                <div class="relative">
+                                    <span
+                                        class="absolute -left-[41px] w-5 h-5 rounded-full border-4 border-white {{ $trackResult->status >= 0 ? 'bg-blue-600' : 'bg-slate-300' }}"></span>
+                                    <h4 class="font-bold text-slate-800">Permohonan Diterima</h4>
+                                    <p class="text-sm text-slate-500">Data pengajuan telah masuk ke sistem desa.</p>
                                 </div>
-                            @endif
+
+                                {{-- Status: Diproses --}}
+                                <div class="relative">
+                                    <span
+                                        class="absolute -left-[41px] w-5 h-5 rounded-full border-4 border-white {{ $trackResult->status >= 1 ? 'bg-blue-600' : 'bg-slate-300' }}"></span>
+                                    <h4
+                                        class="font-bold {{ $trackResult->status >= 1 ? 'text-slate-800' : 'text-slate-400' }}">
+                                        Sedang Diproses</h4>
+                                    <p class="text-sm text-slate-500">Petugas sedang memverifikasi data Anda.</p>
+                                </div>
+
+                                {{-- Status: Selesai --}}
+                                <div class="relative">
+                                    <span
+                                        class="absolute -left-[41px] w-5 h-5 rounded-full border-4 border-white {{ $trackResult->status == 2 ? 'bg-green-500' : 'bg-slate-300' }}"></span>
+                                    <h4
+                                        class="font-bold {{ $trackResult->status == 2 ? 'text-green-600' : 'text-slate-400' }}">
+                                        Selesai / Siap Diambil</h4>
+                                    <p class="text-sm text-slate-500">
+                                        {{ $trackResult->status == 2 ? 'Silakan datang ke kantor desa untuk mengambil surat.' : 'Menunggu proses selesai.' }}
+                                    </p>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                @else
-                    <div class="text-center py-10 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-300">
-                        <span class="text-4xl block mb-2">🔍</span>
-                        <h3 class="font-bold text-slate-600">Data Tidak Ditemukan</h3>
-                        <p class="text-slate-500">Periksa kembali Kode Resi atau Kode Tiket Anda.</p>
+                @elseif(request('kode'))
+                    {{-- JIKA DATA TIDAK DITEMUKAN --}}
+                    <div class="text-center py-10">
+                        <div class="text-6xl mb-4">📂</div>
+                        <h3 class="text-xl font-bold text-slate-700">Data Tidak Ditemukan</h3>
+                        <p class="text-slate-500">Kode resi atau NIK yang Anda masukkan tidak terdaftar.</p>
                     </div>
                 @endif
+
             </div>
-        @endif
-    </div>
+        </div>
+    </section>
 @endsection
