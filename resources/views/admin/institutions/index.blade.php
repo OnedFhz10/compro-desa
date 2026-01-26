@@ -3,60 +3,42 @@
 @section('title', 'Lembaga Desa')
 
 @section('content')
-    <div class="mb-6 flex justify-between items-center">
-        <h2 class="text-lg font-medium text-gray-900">Daftar Lembaga Desa</h2>
-        <a href="{{ route('admin.institutions.create') }}"
-            class="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition">
-            + Tambah Lembaga
-        </a>
-    </div>
-
-    {{-- Pesan Sukses --}}
-    @if (session('success'))
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
-            {{ session('success') }}
+    <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-bold text-white">Daftar Lembaga Desa</h3>
+            <a href="{{ route('admin.institutions.create') }}"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                + Tambah Lembaga
+            </a>
         </div>
-    @endif
 
-    <div class="bg-white rounded shadow overflow-hidden">
-        <table class="w-full text-sm text-left text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3">Logo</th>
-                    <th class="px-6 py-3">Nama Lembaga</th>
-                    <th class="px-6 py-3">Singkatan</th>
-                    <th class="px-6 py-3 text-center">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($institutions as $item)
-                    <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4">
-                            @if ($item->image_path)
-                                <img src="{{ asset('storage/' . $item->image_path) }}"
-                                    class="w-12 h-12 rounded-full object-cover border">
-                            @else
-                                <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-xs">No
-                                    img</div>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 font-bold text-gray-900">{{ $item->name }}</td>
-                        <td class="px-6 py-4">{{ $item->abbreviation ?? '-' }}</td>
-                        <td class="px-6 py-4 text-center">
-                            <form action="{{ route('admin.institutions.destroy', $item->id) }}" method="POST"
-                                onsubmit="return confirm('Hapus lembaga ini?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900 font-medium">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">Belum ada data lembaga desa.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($institutions as $item)
+                <div
+                    class="bg-gray-900 rounded-xl border border-gray-600 p-5 flex flex-col items-center text-center group hover:border-blue-500 transition">
+                    <div
+                        class="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mb-4 overflow-hidden border border-gray-700">
+                        @if ($item->image_path)
+                            <img src="{{ asset('storage/' . $item->image_path) }}" class="w-full h-full object-cover">
+                        @else
+                            <span class="text-3xl">🏢</span>
+                        @endif
+                    </div>
+                    <h4 class="text-lg font-bold text-white mb-1">{{ $item->name }}</h4>
+                    <p class="text-xs text-gray-400 mb-4 line-clamp-2">{{ $item->description }}</p>
+
+                    <div class="mt-auto flex gap-2 w-full pt-4 border-t border-gray-800">
+                        <form action="{{ route('admin.institutions.destroy', $item->id) }}" method="POST" class="w-full"
+                            onsubmit="return confirm('Hapus lembaga ini?');">
+                            @csrf @method('DELETE')
+                            <button
+                                class="w-full py-1.5 text-xs text-red-400 hover:text-red-300 hover:bg-red-900/30 rounded transition">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-10 text-gray-500">Belum ada data lembaga.</div>
+            @endforelse
+        </div>
     </div>
 @endsection

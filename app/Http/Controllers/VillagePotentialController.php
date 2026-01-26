@@ -8,75 +8,81 @@ use Illuminate\Support\Facades\Storage;
 
 class VillagePotentialController extends Controller
 {
+    // 1. DAFTAR POTENSI
     public function index()
     {
         $potentials = VillagePotential::latest()->paginate(10);
         return view('admin.potentials.index', compact('potentials'));
     }
 
+    // 2. FORM TAMBAH
     public function create()
     {
         return view('admin.potentials.create');
     }
 
+    // 3. SIMPAN DATA
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'category' => 'required',
+            'title'       => 'required|max:255',
+            'category'    => 'required|string', // Wisata, Produk, Kuliner, dsb.
             'description' => 'required',
-            'image' => 'nullable|image|max:2048'
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'price'       => 'nullable|numeric', // Opsional (misal harga tiket/produk)
         ]);
 
-        $path = null;
+        $data = $request->all();
+
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('potentials', 'public');
+            $data['image'] = $request->file('image')->store('potentials', 'public');
         }
 
-        VillagePotential::create([
-            'title' => $request->title,
-            'category' => $request->category,
-            'description' => $request->description,
-            'image_path' => $path
-        ]);
+        VillagePotential::create($data);
 
-        return redirect()->route('admin.potentials.index')->with('success', 'Potensi desa ditambahkan!');
+        return redirect()->route('admin.potentials.index')->with('success', 'Potensi desa berhasil ditambahkan!');
     }
 
+    // 4. FORM EDIT
     public function edit(VillagePotential $potential)
     {
         return view('admin.potentials.edit', compact('potential'));
     }
 
+    // 5. UPDATE DATA
     public function update(Request $request, VillagePotential $potential)
     {
         $request->validate([
-            'title' => 'required',
-            'category' => 'required',
+            'title'       => 'required|max:255',
+            'category'    => 'required|string',
             'description' => 'required',
-            'image' => 'nullable|image|max:2048'
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
+
+        $data = $request->all();
 
         if ($request->hasFile('image')) {
-            if ($potential->image_path) Storage::disk('public')->delete($potential->image_path);
-            $potential->image_path = $request->file('image')->store('potentials', 'public');
+            // Hapus gambar lama
+            if ($potential->image) {
+                Storage::disk('public')->delete($potential->image);
+            }
+            $data['image'] = $request->file('image')->store('potentials', 'public');
         }
 
-        $potential->update([
-            'title' => $request->title,
-            'category' => $request->category,
-            'description' => $request->description,
-        ]);
+        $potential->update($data);
 
-        if ($request->hasFile('image')) $potential->save();
-
-        return redirect()->route('admin.potentials.index')->with('success', 'Potensi diperbarui!');
+        return redirect()->route('admin.potentials.index')->with('success', 'Data potensi berhasil diperbarui!');
     }
 
+    // 6. HAPUS DATA
     public function destroy(VillagePotential $potential)
     {
-        if ($potential->image_path) Storage::disk('public')->delete($potential->image_path);
+        if ($potential->image) {
+            Storage::disk('public')->delete($potential->image);
+        }
+        
         $potential->delete();
-        return back()->with('success', 'Data dihapus!');
+
+        return redirect()->route('admin.potentials.index')->with('success', 'Potensi desa dihapus.');
     }
 }

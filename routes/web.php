@@ -2,14 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\VillageProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\VillageProfileController;
 use App\Http\Controllers\VillageOfficialController;
 use App\Http\Controllers\VillagePotentialController;
-use App\Http\Controllers\PublicController;
-use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\VillageInstitutionController;
+use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\LetterRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +30,7 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/profil', 'profile')->name('public.profile');
     Route::get('/kontak', 'contact')->name('public.contact');
-
-    // Tambahkan di bawah route home, atau di dalam group Public Routes
-    Route::get('/pencarian', [PublicController::class, 'search'])->name('public.search');
+    Route::get('/pencarian', 'search')->name('public.search');
     
     // Group Pemerintahan
     Route::prefix('pemerintahan')->group(function() {
@@ -38,9 +39,9 @@ Route::controller(PublicController::class)->group(function () {
         Route::get('/rt-rw', 'rtrw')->name('public.rtrw');
         Route::get('/lembaga', 'institutions')->name('public.institutions');
         Route::get('/lembaga/{slug}', 'showInstitution')->name('public.institution.show');
-    }); // <--- Penutup Group Pemerintahan (PENTING)
+    });
 
-    // Route Group Informasi
+    // Group Informasi
     Route::prefix('informasi')->group(function() {
         Route::get('/berita', 'news')->name('public.news');
         Route::get('/berita/{slug}', 'newsDetail')->name('public.news.show');
@@ -49,21 +50,26 @@ Route::controller(PublicController::class)->group(function () {
         Route::get('/galeri', 'gallery')->name('public.gallery');
     });
 
-    // Route Group Potensi
+    // Group Potensi
     Route::prefix('potensi')->group(function() {
-        Route::get('/', 'potentials')->name('public.potentials'); // Halaman index potensi
+        Route::get('/', 'potentials')->name('public.potentials');
         Route::get('/kategori/{slug}', 'potentialsByCategory')->name('public.potentials.category');
     });
 
-    // Route Group Transparansi
+    // Group Transparansi
     Route::prefix('transparansi')->group(function() {
         Route::get('/apbdes', 'apbdes')->name('public.transparency.apbdes');
         Route::get('/realisasi', 'realisasi')->name('public.transparency.realisasi');
         Route::get('/laporan', 'laporan')->name('public.transparency.laporan');
     });
 
-    // 5. ROUTE LAYANAN PUBLIK
+}); 
+
+
 // ==========================================================
+// 2. ROUTE LAYANAN PUBLIK (Dipisah agar lebih rapi)
+// ==========================================================
+
 Route::controller(ServiceController::class)->prefix('layanan')->group(function() {
     
     // Surat Online
@@ -79,13 +85,11 @@ Route::controller(ServiceController::class)->prefix('layanan')->group(function()
 
     // FAQ
     Route::get('/faq', 'indexFaq')->name('public.layanan.faq');
-    });
-
-}); // <--- Penutup PublicController Group
+});
 
 
 // ==========================================================
-// 2. ROUTE TAMU (Hanya bisa diakses jika BELUM login)
+// 3. ROUTE TAMU (Login)
 // ==========================================================
 
 Route::middleware('guest')->group(function () {
@@ -95,7 +99,7 @@ Route::middleware('guest')->group(function () {
 
 
 // ==========================================================
-// 3. ROUTE LOGOUT (Hanya bisa diakses jika SUDAH login)
+// 4. ROUTE LOGOUT
 // ==========================================================
 
 Route::post('/logout', [AuthController::class, 'logout'])
@@ -104,7 +108,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 
 // ==========================================================
-// 4. ROUTE ADMIN (Hanya bisa diakses jika SUDAH login)
+// 5. ROUTE ADMIN (Hanya user login)
 // ==========================================================
 
 Route::middleware('auth')->prefix('admin')->group(function () {
@@ -112,15 +116,22 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Profil Desa
+    // Profil Desa (Single Record Update)
     Route::get('/profile', [VillageProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::put('/profile', [VillageProfileController::class, 'update'])->name('admin.profile.update');
 
-    // Resource Controllers (CRUD Otomatis)
+    // Transparansi / APBDes
+    Route::resource('/budgets', BudgetController::class)->names('admin.budgets');
+
+    // Resource Controllers (CRUD)
     Route::resource('/posts', PostController::class)->names('admin.posts');
     Route::resource('/galleries', GalleryController::class)->names('admin.galleries');
     Route::resource('/officials', VillageOfficialController::class)->names('admin.officials');
     Route::resource('/potentials', VillagePotentialController::class)->names('admin.potentials');
-    Route::resource('/institutions', \App\Http\Controllers\VillageInstitutionController::class)->names('admin.institutions');
+    Route::resource('/institutions', VillageInstitutionController::class)->names('admin.institutions');
 
+    // Layanan Surat (Admin hanya memproses, tidak create)
+    Route::resource('/letters', LetterRequestController::class)
+        ->names('admin.letters')
+        ->except(['create', 'store', 'edit']); 
 });
