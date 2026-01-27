@@ -1,67 +1,89 @@
 @extends('layouts.app')
-@section('title', 'Data RT / RW')
+
+@section('title', 'Data RT & RW')
+
 @section('content')
+    {{-- 1. HERO HEADER --}}
+    <section class="relative bg-slate-900 h-[400px] flex items-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-blue-900/30 z-10"></div>
+            <img src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2922&auto=format&fit=crop"
+                alt="Background" class="w-full h-full object-cover opacity-40">
+        </div>
 
-    <div class="bg-slate-900 py-20 text-center relative">
-        <h1 class="text-4xl font-extrabold text-white mb-4">Data Ketua RT & RW</h1>
-        <p class="text-slate-300">Ujung tombak pelayanan administratif kewilayahan.</p>
-    </div>
+        <div class="container mx-auto px-4 lg:px-8 relative z-20 text-center pt-10">
+            <span
+                class="text-blue-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">Wilayah</span>
+            <h1
+                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
+                Data RT & RW
+            </h1>
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+                Pemetaan administratif wilayah {{ $profile?->village_name ?? 'Desa' }} mulai dari Dusun hingga tingkat RT.
+            </p>
+        </div>
+    </section>
 
-    <div class="container mx-auto px-4 py-16">
-        @forelse($neighborhoods as $dusun => $rws)
-            <div class="mb-16">
-                <div class="flex items-center gap-4 mb-8">
-                    <span class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center text-2xl">🏡</span>
-                    <div>
-                        <span class="text-xs font-bold text-blue-600 uppercase tracking-widest">Wilayah</span>
-                        <h2 class="text-3xl font-bold text-slate-800">Dusun {{ $dusun }}</h2>
+    {{-- 2. CONTENT LIST --}}
+    <div class="container mx-auto px-4 lg:px-8 pb-20 relative z-30 -mt-20">
+        <div class="space-y-8 animate-fade-in-up animation-delay-500">
+            @forelse ($neighborhoods as $dusun => $rws)
+                {{-- Card Per Dusun --}}
+                <div class="bg-white rounded-3xl p-6 lg:p-8 shadow-xl shadow-slate-200/50 border border-gray-100">
+
+                    {{-- Header Dusun --}}
+                    <div class="flex items-center gap-4 mb-8 pb-4 border-b border-slate-100">
+                        <div class="bg-blue-600 p-3 rounded-xl text-white shadow-lg shadow-blue-200">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="text-sm text-slate-500 font-bold uppercase tracking-wider">Wilayah</span>
+                            <h2 class="text-2xl font-bold text-slate-900 leading-none mt-1">Dusun {{ $dusun }}</h2>
+                        </div>
+                    </div>
+
+                    {{-- Grid RW --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach ($rws as $rw => $data_rt)
+                            <div
+                                class="bg-slate-50 rounded-2xl p-5 border border-slate-200 hover:border-blue-300 transition-colors">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-bold text-slate-800">RW {{ $rw }}</h3>
+                                    <span
+                                        class="bg-white border border-slate-200 text-slate-600 text-xs font-bold px-2 py-1 rounded-md shadow-sm">
+                                        {{ $data_rt->count() }} RT
+                                    </span>
+                                </div>
+
+                                {{-- List RT --}}
+                                <ul class="space-y-2">
+                                    @foreach ($data_rt as $rt)
+                                        <li
+                                            class="flex items-center justify-between text-sm bg-white p-2.5 rounded-lg border border-slate-100">
+                                            <span class="font-bold text-blue-600">RT {{ $rt->rt }}</span>
+                                            <span
+                                                class="text-slate-500 text-xs uppercase font-medium truncate max-w-[100px]"
+                                                title="{{ $rt->ketua_rt }}">
+                                                {{ $rt->ketua_rt ?? 'Ketua -' }}
+                                            </span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    @foreach ($rws as $rw_no => $rts)
-                        <div
-                            class="bg-white rounded-3xl shadow-lg shadow-slate-200/50 border border-gray-100 overflow-hidden">
-                            <div class="bg-slate-50 px-8 py-5 border-b border-gray-100 flex justify-between items-center">
-                                <h3 class="font-bold text-lg text-slate-800">Rukun Warga (RW) {{ $rw_no }}</h3>
-                                <span
-                                    class="bg-white border border-gray-200 text-xs font-bold px-3 py-1 rounded-full text-slate-600">Total
-                                    {{ count($rts) }} RT</span>
-                            </div>
-                            <div class="divide-y divide-gray-50">
-                                @foreach ($rts as $rt)
-                                    <div
-                                        class="px-8 py-5 flex justify-between items-center hover:bg-blue-50/50 transition group">
-                                        <div class="flex items-center gap-4">
-                                            <div
-                                                class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold text-xs group-hover:bg-blue-600 group-hover:text-white transition">
-                                                {{ $rt->rt }}
-                                            </div>
-                                            <div>
-                                                <p class="font-bold text-slate-800">{{ $rt->head_name }}</p>
-                                                <p class="text-xs text-slate-500">Ketua RT {{ $rt->rt }}</p>
-                                            </div>
-                                        </div>
-                                        @if ($rt->phone)
-                                            <a href="https://wa.me/{{ $rt->phone }}"
-                                                class="text-green-500 hover:text-green-600">
-                                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path
-                                                        d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.637 3.891 1.685 5.522l-1.117 4.08 4.004-1.096z" />
-                                                </svg>
-                                            </a>
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
+            @empty
+                <div class="bg-white rounded-3xl p-12 text-center shadow-lg">
+                    <p class="text-slate-500">Belum ada data wilayah RT/RW.</p>
                 </div>
-            </div>
-        @empty
-            <div class="text-center py-20">
-                <p class="text-slate-500">Data RT/RW belum tersedia.</p>
-            </div>
-        @endforelse
+            @endforelse
+        </div>
     </div>
 @endsection

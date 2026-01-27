@@ -9,9 +9,8 @@ class VillageProfile extends Model
 {
     use HasFactory;
 
-    // Nama tabel di database
     protected $table = 'village_profiles';
-
-    // Izinkan pengisian semua kolom (kecuali ID)
+    
+    // Semua kolom boleh diisi kecuali ID
     protected $guarded = ['id'];
 }

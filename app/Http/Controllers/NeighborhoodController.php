@@ -9,11 +9,10 @@ class NeighborhoodController extends Controller
 {
     public function index()
     {
-        // Urutkan biar rapi: Dusun A -> RW 01 -> RT 01
         $neighborhoods = Neighborhood::orderBy('dusun')
                                      ->orderBy('rw')
                                      ->orderBy('rt')
-                                     ->paginate(20);
+                                     ->paginate(15);
         return view('admin.neighborhoods.index', compact('neighborhoods'));
     }
 
@@ -25,15 +24,38 @@ class NeighborhoodController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'dusun' => 'required|string',
-            'rw'    => 'required|string',
-            'rt'    => 'required|string',
-            'name'  => 'required|string', // Nama Ketua RT
-            'phone' => 'nullable|string',
+            'dusun'     => 'required|string',
+            'rw'        => 'required|string',
+            'rt'        => 'required|string',
+            'head_name' => 'required|string', // PERBAIKAN: Gunakan head_name
+            'phone'     => 'nullable|string',
         ]);
 
         Neighborhood::create($request->all());
-        return redirect()->route('admin.neighborhoods.index')->with('success', 'Data RT/RW berhasil ditambahkan');
+
+        return redirect()->route('admin.neighborhoods.index')
+                         ->with('success', 'Data RT berhasil ditambahkan');
+    }
+
+    public function edit(Neighborhood $neighborhood)
+    {
+        return view('admin.neighborhoods.edit', compact('neighborhood'));
+    }
+
+    public function update(Request $request, Neighborhood $neighborhood)
+    {
+        $request->validate([
+            'dusun'     => 'required|string',
+            'rw'        => 'required|string',
+            'rt'        => 'required|string',
+            'head_name' => 'required|string', // PERBAIKAN
+            'phone'     => 'nullable|string',
+        ]);
+
+        $neighborhood->update($request->all());
+
+        return redirect()->route('admin.neighborhoods.index')
+                         ->with('success', 'Data RT berhasil diperbarui');
     }
 
     public function destroy(Neighborhood $neighborhood)

@@ -13,6 +13,7 @@ use App\Http\Controllers\VillagePotentialController;
 use App\Http\Controllers\VillageInstitutionController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\LetterRequestController;
+use App\Http\Controllers\NeighborhoodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,6 +117,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+    // 1. ROUTE KHUSUS UPLOAD STRUKTUR (Tambahkan ini DI ATAS resource officials)
+    Route::put('/officials/structure', [VillageOfficialController::class, 'updateStructure'])
+        ->name('admin.officials.structure');
+
     // Profil Desa (Single Record Update)
     Route::get('/profile', [VillageProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::put('/profile', [VillageProfileController::class, 'update'])->name('admin.profile.update');
@@ -129,6 +134,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('/officials', VillageOfficialController::class)->names('admin.officials');
     Route::resource('/potentials', VillagePotentialController::class)->names('admin.potentials');
     Route::resource('/institutions', VillageInstitutionController::class)->names('admin.institutions');
+    Route::resource('/neighborhoods', NeighborhoodController::class)->names('admin.neighborhoods');
 
     // Layanan Surat (Admin hanya memproses, tidak create)
     Route::resource('/letters', LetterRequestController::class)

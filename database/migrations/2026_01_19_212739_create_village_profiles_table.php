@@ -13,14 +13,15 @@ return new class extends Migration
 {
     Schema::create('village_profiles', function (Blueprint $table) {
         $table->id();
-        $table->string('village_name'); // Nama Desa
-        $table->text('address')->nullable();
-        $table->text('history')->nullable(); // Sejarah
-        $table->text('vision')->nullable(); // Visi
-        $table->text('mission')->nullable(); // Misi
-        $table->string('logo_path')->nullable(); // Foto Logo
+        $table->string('village_name');
+        $table->text('history')->nullable(); // Pakai text agar muat banyak
+        $table->text('vision')->nullable();
+        $table->text('mission')->nullable();
+        $table->string('address')->nullable();
         $table->string('email')->nullable();
         $table->string('phone')->nullable();
+        $table->string('logo_path')->nullable(); // Menyimpan path gambar
+        $table->string('structure_image')->nullable(); // Menyimpan path gambar struktur
         $table->timestamps();
     });
 }

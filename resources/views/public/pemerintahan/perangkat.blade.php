@@ -1,68 +1,73 @@
 @extends('layouts.app')
+
 @section('title', 'Perangkat Desa')
+
 @section('content')
-
-    <div class="bg-slate-900 py-20 relative overflow-hidden">
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-white mb-4">Aparatur Desa</h1>
-            <p class="text-slate-400 text-lg">Mengenal jajaran perangkat desa yang siap melayani masyarakat.</p>
+    {{-- 1. HERO HEADER --}}
+    <section class="relative bg-slate-900 h-[400px] flex items-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-blue-900/30 z-10"></div>
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=2940&auto=format&fit=crop"
+                alt="Background" class="w-full h-full object-cover opacity-40">
         </div>
-    </div>
 
-    <div class="bg-gray-50 py-16 min-h-screen">
-        <div class="container mx-auto px-4 lg:px-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                @forelse($officials as $staff)
+        <div class="container mx-auto px-4 lg:px-8 relative z-20 text-center pt-10">
+            <span
+                class="text-blue-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">Pemerintahan</span>
+            <h1
+                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
+                Perangkat Desa
+            </h1>
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+                Jajaran aparatur yang siap melayani masyarakat {{ $profile?->village_name ?? 'Desa' }} dengan sepenuh hati.
+            </p>
+        </div>
+    </section>
+
+    {{-- 2. CONTENT LIST PERANGKAT --}}
+    <div class="container mx-auto px-4 lg:px-8 pb-20 relative z-30 -mt-20">
+        @if ($officials->count() > 0)
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                @foreach ($officials as $official)
                     <div
-                        class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-2 transition duration-500 group border border-gray-100">
+                        class="group bg-white rounded-3xl shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden animate-fade-in-up">
+
                         {{-- Foto --}}
-                        <div class="relative h-80 overflow-hidden bg-slate-200">
-                            @if ($staff->image_path)
-                                <img src="{{ asset('storage/' . $staff->image_path) }}"
-                                    class="w-full h-full object-cover object-top transition duration-700 group-hover:scale-110">
+                        <div class="relative h-72 overflow-hidden bg-slate-100">
+                            @if ($official->image)
+                                <img src="{{ asset('storage/' . $official->image) }}" alt="{{ $official->name }}"
+                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             @else
-                                <div class="w-full h-full flex items-center justify-center text-slate-400">
-                                    <svg class="w-20 h-20" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode($official->name) }}&background=random&size=256"
+                                    class="w-full h-full object-cover">
                             @endif
                             <div
-                                class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60">
+                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80">
                             </div>
 
-                            {{-- Nama di atas Foto --}}
-                            <div class="absolute bottom-0 left-0 w-full p-6 text-white">
-                                <h3 class="text-xl font-bold leading-tight">{{ $staff->name }}</h3>
-                                <p class="text-blue-300 text-sm font-semibold uppercase tracking-wider mt-1">
-                                    {{ $staff->position }}</p>
+                            {{-- Teks di atas foto (posisi bawah) --}}
+                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                <h3 class="text-xl font-bold leading-tight mb-1">{{ $official->name }}</h3>
+                                <p class="text-blue-300 font-medium text-sm uppercase tracking-wide">
+                                    {{ $official->position }}</p>
                             </div>
                         </div>
 
-                        {{-- Info Tambahan --}}
-                        <div class="p-6">
-                            <div class="flex items-center gap-3 text-sm text-slate-500 mb-2">
-                                <span
-                                    class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">NIP</span>
-                                <span>{{ $staff->nip ?? '-' }}</span>
+                        {{-- Info Tambahan (NIP/Telp jika ada) --}}
+                        @if ($official->nip || $official->phone)
+                            <div class="p-4 bg-white border-t border-slate-100">
+                                @if ($official->nip)
+                                    <p class="text-xs text-slate-500 font-mono text-center">NIP: {{ $official->nip }}</p>
+                                @endif
                             </div>
-                            @if ($staff->phone)
-                                <div class="pt-4 mt-2 border-t border-gray-100">
-                                    <a href="https://wa.me/{{ $staff->phone }}"
-                                        class="block w-full text-center bg-slate-900 text-white py-2 rounded-xl text-sm font-bold hover:bg-blue-600 transition">
-                                        Hubungi
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
+                        @endif
                     </div>
-                @empty
-                    <div class="col-span-4 text-center py-20">
-                        <p class="text-slate-500">Data perangkat desa belum tersedia.</p>
-                    </div>
-                @endforelse
+                @endforeach
             </div>
-        </div>
+        @else
+            <div class="bg-white rounded-3xl p-12 text-center shadow-lg">
+                <p class="text-slate-500 text-lg">Data perangkat desa belum tersedia.</p>
+            </div>
+        @endif
     </div>
 @endsection
