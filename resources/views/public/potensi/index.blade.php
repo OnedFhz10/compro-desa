@@ -22,7 +22,7 @@
     <section class="py-16 bg-gray-50 min-h-screen">
         <div class="container mx-auto px-4 lg:px-8">
 
-            {{-- Filter Tabs (Visual Only for now based on Route) --}}
+            {{-- Filter Tabs --}}
             <div class="flex justify-center mb-12 gap-2 flex-wrap">
                 <a href="{{ route('public.potentials') }}"
                     class="px-6 py-2 rounded-full text-sm font-bold transition {{ request()->routeIs('public.potentials') ? 'bg-emerald-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-gray-100' }}">Semua</a>
@@ -39,13 +39,15 @@
                     <div
                         class="bg-white rounded-3xl overflow-hidden shadow-lg shadow-slate-200/50 border border-gray-100 hover:-translate-y-2 transition duration-300 group">
                         <div class="relative h-64 overflow-hidden">
-                            @if ($item->image_path)
-                                <img src="{{ asset('storage/' . $item->image_path) }}"
+                            {{-- PERBAIKAN: Gunakan $item->image --}}
+                            @if ($item->image)
+                                <img src="{{ asset('storage/' . $item->image) }}"
                                     class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
                             @else
                                 <div
                                     class="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400 font-bold">
-                                    No Image</div>
+                                    No Image
+                                </div>
                             @endif
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">

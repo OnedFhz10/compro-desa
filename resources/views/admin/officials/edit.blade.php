@@ -1,46 +1,65 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah Perangkat Desa')
+@section('title', 'Edit Perangkat')
 
 @section('content')
-    <div class="bg-white rounded-lg shadow-sm p-6 max-w-2xl">
-        <form action="{{ route('admin.officials.store') }}" method="POST" enctype="multipart/form-data">
+    <div class="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
+            <h2 class="text-xl font-bold text-white">Edit Data Perangkat</h2>
+            <a href="{{ route('admin.officials.index') }}" class="text-gray-400 hover:text-white text-sm">&larr; Kembali</a>
+        </div>
+
+        <form action="{{ route('admin.officials.update', $official->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
 
-            {{-- Nama Lengkap --}}
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Nama Lengkap</label>
-                <input type="text" name="name" class="w-full border border-gray-300 rounded-lg px-4 py-2" required
-                    placeholder="Contoh: Budi Santoso, S.Pd">
-            </div>
+            <div class="grid gap-6">
+                <div class="grid grid-cols-2 gap-4">
+                    {{-- Nama --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-300">Nama Lengkap</label>
+                        <input type="text" name="name" value="{{ $official->name }}" required
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    </div>
+                    {{-- No Urut --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-300">No. Urut Tampil</label>
+                        <input type="number" name="order_level" value="{{ $official->order_level }}" required
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    </div>
+                </div>
 
-            {{-- Jabatan --}}
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Jabatan</label>
-                <input type="text" name="position" class="w-full border border-gray-300 rounded-lg px-4 py-2" required
-                    placeholder="Contoh: Kepala Desa / Sekretaris Desa">
-            </div>
+                {{-- Jabatan --}}
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-300">Jabatan</label>
+                    <input type="text" name="position" value="{{ $official->position }}" required
+                        class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                </div>
 
-            {{-- NIP (Opsional tapi ditampilkan di Public jika ada) --}}
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2">NIP / NIAP (Opsional)</label>
-                <input type="text" name="nip" class="w-full border border-gray-300 rounded-lg px-4 py-2"
-                    placeholder="Nomor Induk Perangkat...">
-            </div>
+                {{-- NIP --}}
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-300">NIP / NIAP (Opsional)</label>
+                    <input type="text" name="nip" value="{{ $official->nip }}"
+                        class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                </div>
 
-            {{-- Foto Profil --}}
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Foto Resmi</label>
-                <input type="file" name="image"
-                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                <p class="text-xs text-gray-500 mt-1">Disarankan rasio foto portrait (3:4) agar rapi di halaman public.</p>
-            </div>
+                {{-- Foto --}}
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-300">Ganti Foto (Opsional)</label>
+                    @if ($official->image_path)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $official->image_path) }}"
+                                class="h-20 w-20 object-cover rounded-full border border-gray-600">
+                        </div>
+                    @endif
+                    <input type="file" name="image" accept="image/*"
+                        class="block w-full text-sm text-gray-400 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none">
+                </div>
 
-            <div class="flex justify-end gap-3">
-                <a href="{{ route('admin.officials.index') }}"
-                    class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Batal</a>
                 <button type="submit"
-                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-bold">Simpan</button>
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-lg transition">
+                    Simpan Perubahan
+                </button>
             </div>
         </form>
     </div>

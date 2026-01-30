@@ -9,12 +9,12 @@ class Budget extends Model
 {
     use HasFactory;
 
-    // PENTING: Daftarkan semua nama kolom database di sini
     protected $fillable = [
         'year',
+        'category',    // <--- PASTIKAN INI ADA
         'type',
         'amount',
         'description',
-        'file_path', // Pastikan ini ada jika Anda mengupload file
+        'file_path',
     ];
 }

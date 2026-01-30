@@ -1,154 +1,115 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Profil Desa')
+@section('title', 'Identitas Desa')
 
 @section('content')
+    {{-- 
+    CATATAN PENTING:
+    Tidak perlu ada kode @if (session('success')) di sini, 
+    karena sudah otomatis ditangani oleh file layouts/admin.blade.php 
+--}}
 
-    <div class="space-y-6">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h2 class="text-2xl font-bold text-gray-100">Identitas & Profil</h2>
-                <p class="text-gray-400 text-sm">Kelola data sejarah, visi misi, struktur organisasi, dan identitas utama
-                    desa.</p>
-            </div>
-            <button type="submit" form="profile-form"
-                class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-lg transition flex items-center gap-2 transform hover:scale-105">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4">
-                    </path>
-                </svg>
-                Simpan Perubahan
-            </button>
+    <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+        <div class="border-b border-gray-700 pb-4 mb-6">
+            <h2 class="text-xl font-bold text-white">Edit Profil Desa</h2>
+            <p class="text-sm text-gray-400">Informasi umum, kontak, dan data visual desa.</p>
         </div>
 
-        @if (session('success'))
-            <div class="bg-green-900/50 border border-green-500 text-green-300 px-4 py-3 rounded relative" role="alert">
-                <span class="block sm:inline">{{ session('success') }}</span>
-            </div>
-        @endif
-
-        <form id="profile-form" action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-                {{-- KOLOM KIRI --}}
-                <div class="lg:col-span-1 space-y-6">
-
-                    {{-- 1. LOGO --}}
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-lg">
-                        <h3 class="text-lg font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">Logo Desa</h3>
-                        <div class="flex flex-col items-center text-center gap-4">
-                            @if ($profile->logo_path)
-                                <div class="bg-white p-2 rounded-full border-4 border-gray-600 shadow-md">
-                                    <img src="{{ asset('storage/' . $profile->logo_path) }}"
-                                        class="h-24 w-24 object-contain">
-                                </div>
-                            @else
-                                <div
-                                    class="h-24 w-24 bg-gray-700 rounded-full flex items-center justify-center text-xs text-gray-400 border-2 border-dashed border-gray-600">
-                                    No Logo</div>
-                            @endif
-                            <div class="w-full">
-                                <input type="file" name="logo_path"
-                                    class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:bg-blue-900 file:text-blue-300 border border-gray-600 rounded-lg bg-gray-900">
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- 2. STRUKTUR ORGANISASI --}}
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-lg">
-                        <h3 class="text-lg font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">Struktur
-                            Organisasi</h3>
-
-                        <div class="space-y-4">
-                            {{-- Preview Gambar (Gunakan structure_image_path) --}}
-                            @if ($profile->structure_image_path)
-                                <div class="relative group rounded-lg overflow-hidden border border-gray-600">
-                                    <img src="{{ asset('storage/' . $profile->structure_image_path) }}"
-                                        class="w-full h-auto object-cover opacity-80 group-hover:opacity-100 transition duration-300">
-                                    <div
-                                        class="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition duration-300">
-                                        <a href="{{ asset('storage/' . $profile->structure_image_path) }}" target="_blank"
-                                            class="text-xs bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-500">Lihat
-                                            Full</a>
-                                    </div>
-                                </div>
-                                <p class="text-center text-xs text-green-400 font-medium mt-1">Gambar Terupload</p>
-                            @else
-                                <div
-                                    class="w-full h-32 bg-gray-700 rounded-lg border-2 border-dashed border-gray-600 flex flex-col items-center justify-center text-gray-500">
-                                    <span class="text-xs">Belum ada gambar struktur</span>
-                                </div>
-                            @endif
-
-                            {{-- Input Upload (PENTING: name="structure_image_path") --}}
-                            <div>
-                                <label class="block text-sm font-medium text-gray-400 mb-2">Upload Bagan Struktur</label>
-                                <input type="file" name="structure_image_path"
-                                    class="block w-full text-sm text-gray-400
-                                file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0
-                                file:text-xs file:font-semibold file:bg-purple-900 file:text-purple-300
-                                hover:file:bg-purple-800 cursor-pointer border border-gray-600 rounded-lg bg-gray-900">
-                                <p class="text-xs text-gray-500 mt-2">Format: JPG/PNG. Max 5MB.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- 3. KONTAK --}}
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-lg">
-                        <h3 class="text-lg font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">Kontak</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="text-gray-400 text-sm">Nama Desa</label>
-                                <input type="text" name="village_name"
-                                    value="{{ old('village_name', $profile->village_name) }}"
-                                    class="w-full bg-gray-900 border-gray-600 text-gray-100 rounded-lg px-3 py-2">
-                            </div>
-                            <div>
-                                <label class="text-gray-400 text-sm">Email</label>
-                                <input type="email" name="email" value="{{ old('email', $profile->email) }}"
-                                    class="w-full bg-gray-900 border-gray-600 text-gray-100 rounded-lg px-3 py-2">
-                            </div>
-                            <div>
-                                <label class="text-gray-400 text-sm">Telepon</label>
-                                <input type="text" name="phone" value="{{ old('phone', $profile->phone) }}"
-                                    class="w-full bg-gray-900 border-gray-600 text-gray-100 rounded-lg px-3 py-2">
-                            </div>
-                            <div>
-                                <label class="text-gray-400 text-sm">Alamat</label>
-                                <textarea name="address" rows="3" class="w-full bg-gray-900 border-gray-600 text-gray-100 rounded-lg px-3 py-2">{{ old('address', $profile->address) }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- KOLOM KANAN --}}
+                {{-- KOLOM KIRI: Data Teks --}}
                 <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-lg">
-                        <h3 class="text-lg font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">Sejarah</h3>
-                        <textarea name="history" rows="12" class="w-full bg-gray-900 border-gray-600 text-gray-100 rounded-lg px-4 py-3">{{ old('history', $profile->history) }}</textarea>
+
+                    {{-- Nama Desa --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-300">Nama Desa</label>
+                        <input type="text" name="village_name"
+                            value="{{ old('village_name', $profile->village_name ?? '') }}" required
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                     </div>
 
-                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-lg">
-                        <h3 class="text-lg font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">Visi & Misi</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="text-gray-400 text-sm">Visi</label>
-                                <textarea name="vision" rows="3" class="w-full bg-gray-900 border-gray-600 text-gray-100 rounded-lg px-4 py-3">{{ old('vision', $profile->vision) }}</textarea>
-                            </div>
-                            <div>
-                                <label class="text-gray-400 text-sm">Misi</label>
-                                <textarea name="mission" rows="6" class="w-full bg-gray-900 border-gray-600 text-gray-100 rounded-lg px-4 py-3">{{ old('mission', $profile->mission) }}</textarea>
-                            </div>
+                    {{-- Kontak --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-300">Email Resmi</label>
+                            <input type="email" name="email" value="{{ old('email', $profile->email ?? '') }}"
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-300">Nomor Telepon / WhatsApp</label>
+                            <input type="tel" name="phone" value="{{ old('phone', $profile->phone ?? '') }}"
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         </div>
                     </div>
+
+                    {{-- Alamat --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-300">Alamat Kantor Desa</label>
+                        <textarea name="address" rows="2"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">{{ old('address', $profile->address ?? '') }}</textarea>
+                    </div>
+
+                    {{-- Sejarah --}}
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-300">Sejarah Desa</label>
+                        <textarea name="history" rows="4"
+                            class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">{{ old('history', $profile->history ?? '') }}</textarea>
+                    </div>
+
+                    {{-- Visi & Misi --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-300">Visi</label>
+                            <textarea name="vision" rows="4"
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">{{ old('vision', $profile->vision ?? '') }}</textarea>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-300">Misi</label>
+                            <textarea name="mission" rows="4"
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">{{ old('mission', $profile->mission ?? '') }}</textarea>
+                        </div>
+                    </div>
+
                 </div>
 
+                {{-- KOLOM KANAN: Gambar --}}
+                <div class="space-y-6">
+
+                    {{-- Logo Desa --}}
+                    <div class="bg-gray-700 p-4 rounded-lg border border-gray-600">
+                        <label class="block mb-3 text-sm font-medium text-gray-300">Logo Desa</label>
+
+                        @if (isset($profile->logo_path) && $profile->logo_path)
+                            <div class="mb-3 flex justify-center p-2 bg-gray-800 rounded">
+                                <img src="{{ asset('storage/' . $profile->logo_path) }}" alt="Logo"
+                                    class="h-32 object-contain">
+                            </div>
+                        @else
+                            <div
+                                class="mb-3 h-32 bg-gray-800 rounded flex items-center justify-center text-gray-500 text-xs">
+                                Belum ada logo
+                            </div>
+                        @endif
+
+                        <input type="file" name="logo_path" accept="image/*"
+                            class="block w-full text-xs text-gray-400 border border-gray-600 rounded cursor-pointer bg-gray-600 focus:outline-none">
+                        <p class="mt-1 text-[10px] text-gray-400">Format: PNG/JPG (Max 2MB). Transparan disarankan.</p>
+                    </div>
+                </div>
             </div>
+
+            {{-- Tombol Simpan --}}
+            <div class="mt-8 pt-6 border-t border-gray-700 flex justify-end">
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-lg transition shadow-lg">
+                    Simpan Perubahan
+                </button>
+            </div>
+
         </form>
     </div>
-
 @endsection

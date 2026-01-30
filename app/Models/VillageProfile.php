@@ -9,8 +9,17 @@ class VillageProfile extends Model
 {
     use HasFactory;
 
-    protected $table = 'village_profiles';
-    
-    // Semua kolom boleh diisi kecuali ID
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'village_name',
+        'address',
+        'email',
+        'phone',
+        'history',            // Sejarah
+        'vision',             // Visi
+        'mission',            // Misi
+        'logo_path',
+        'structure_image_path', // BAGAN STRUKTUR
+        'latitude',           // Peta (Opsional)
+        'longitude',          // Peta (Opsional)
+    ];
 }

@@ -3,75 +3,105 @@
 @section('title', 'Tulis Berita Baru')
 
 @section('content')
-
-    <div class="max-w-4xl mx-auto bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-6">
-
-        <div class="mb-6 border-b border-gray-700 pb-4 flex justify-between items-center">
-            <h3 class="text-lg font-semibold text-gray-100">Formulir Berita</h3>
-            <a href="{{ route('admin.posts.index') }}" class="text-gray-400 hover:text-white text-sm transition">&larr;
-                Kembali</a>
+    <div class="max-w-4xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
+            <div>
+                <h2 class="text-xl font-bold text-white">Berita Baru</h2>
+                <p class="text-sm text-gray-400">Bagikan informasi terbaru kepada warga desa.</p>
+            </div>
+            <a href="{{ route('admin.posts.index') }}"
+                class="text-gray-400 hover:text-white text-sm bg-gray-700 px-3 py-1.5 rounded transition">
+                &larr; Kembali
+            </a>
         </div>
 
+        {{-- Form dengan enctype multipart/form-data --}}
         <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            {{-- Judul --}}
-            <div class="mb-5">
-                <label class="block text-sm font-medium text-gray-400 mb-2">Judul Artikel</label>
-                <input type="text" name="title" value="{{ old('title') }}"
-                    placeholder="Contoh: Kegiatan Kerja Bakti Desa Maju Jaya"
-                    class="w-full bg-gray-900 border border-gray-600 text-gray-100 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2.5"
-                    required>
-                @error('title')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+            <div class="grid gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
-                {{-- Kategori --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2">Kategori</label>
-                    <select name="category_id"
-                        class="w-full bg-gray-900 border border-gray-600 text-gray-100 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-2.5">
-                        @foreach ($categories as $cat)
-                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                        @endforeach
-                    </select>
+                    {{-- Kolom Kiri: Input Utama (Judul & Konten) --}}
+                    <div class="md:col-span-2 space-y-6">
+                        {{-- Judul --}}
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-300">Judul Berita <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="title" value="{{ old('title') }}" required
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                placeholder="Contoh: Kegiatan Kerja Bakti Dusun A">
+                            @error('title')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- Konten --}}
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-300">Isi Berita <span
+                                    class="text-red-500">*</span></label>
+                            <textarea name="content" rows="12" required
+                                class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 font-mono leading-relaxed"
+                                placeholder="Tuliskan detail berita lengkap di sini...">{{ old('content') }}</textarea>
+                            @error('content')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    {{-- Kolom Kanan: Meta Data (Kategori & Gambar) --}}
+                    <div class="space-y-6">
+
+                        {{-- Kategori --}}
+                        <div class="bg-gray-700 p-4 rounded-lg border border-gray-600">
+                            <label class="block mb-2 text-sm font-medium text-gray-300">Kategori <span
+                                    class="text-red-500">*</span></label>
+                            <select name="category_id" required
+                                class="bg-gray-600 border border-gray-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                <option value="">-- Pilih Kategori --</option>
+                                @foreach ($categories as $cat)
+                                    <option value="{{ $cat->id }}"
+                                        {{ old('category_id') == $cat->id ? 'selected' : '' }}>
+                                        {{ $cat->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="mt-2 text-[10px] text-gray-400">Pilih "Pengumuman" jika ini info resmi.</p>
+                            @error('category_id')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- Upload Gambar --}}
+                        <div class="bg-gray-700 p-4 rounded-lg border border-gray-600">
+                            <label class="block mb-2 text-sm font-medium text-gray-300">Gambar Utama</label>
+
+                            {{-- Input Name harus 'image' sesuai validasi di Controller --}}
+                            <input type="file" name="image" accept="image/*"
+                                class="block w-full text-xs text-gray-400 border border-gray-500 rounded cursor-pointer bg-gray-600 focus:outline-none mb-2">
+
+                            <p class="text-[10px] text-gray-400">Format: JPG, PNG, WEBP. Maks 2MB.</p>
+                            @error('image')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                    </div>
                 </div>
 
-                {{-- Upload Gambar --}}
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2">Gambar Utama</label>
-                    <input type="file" name="image"
-                        class="block w-full text-sm text-gray-400
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-full file:border-0
-                    file:text-xs file:font-semibold
-                    file:bg-gray-700 file:text-blue-400
-                    hover:file:bg-gray-600
-                    cursor-pointer border border-gray-600 rounded-lg bg-gray-900
-                ">
-                    <p class="text-xs text-gray-500 mt-1">Opsional. Max 2MB.</p>
+                {{-- Tombol Submit --}}
+                <div class="border-t border-gray-700 pt-6 flex justify-end">
+                    <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-8 rounded-lg transition shadow-lg flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4">
+                            </path>
+                        </svg>
+                        Terbitkan Berita
+                    </button>
                 </div>
-            </div>
-
-            {{-- Konten Artikel --}}
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-400 mb-2">Isi Berita</label>
-                <textarea name="content" rows="12" placeholder="Tulis isi berita di sini..."
-                    class="w-full bg-gray-900 border border-gray-600 text-gray-100 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 px-4 py-3 leading-relaxed">{{ old('content') }}</textarea>
-                <p class="text-xs text-gray-500 mt-2 text-right">Tips: Tekan Enter 2x untuk paragraf baru.</p>
-            </div>
-
-            <div class="flex justify-end gap-3 pt-4 border-t border-gray-700">
-                <button type="reset"
-                    class="px-6 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700 transition">Reset</button>
-                <button type="submit"
-                    class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-lg transition transform hover:scale-105">
-                    Terbitkan Berita
-                </button>
             </div>
         </form>
     </div>
-
 @endsection

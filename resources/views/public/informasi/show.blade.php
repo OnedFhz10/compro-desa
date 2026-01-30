@@ -3,16 +3,17 @@
 {{-- META DATA DINAMIS --}}
 @section('title', $post->title)
 @section('meta_description', Str::limit(strip_tags($post->content), 150))
-@if ($post->image_path)
-    @section('meta_image', asset('storage/' . $post->image_path))
+@if ($post->image)
+    @section('meta_image', asset('storage/' . $post->image))
 @endif
 
 @section('content')
     {{-- HEADER GAMBAR (Parallax Effect) --}}
     <div class="relative h-[400px] md:h-[500px] overflow-hidden">
         <div class="absolute inset-0 bg-slate-900/50 z-10"></div>
-        @if ($post->image_path)
-            <img src="{{ asset('storage/' . $post->image_path) }}" class="w-full h-full object-cover fixed-parallax">
+        {{-- PERBAIKAN: Gunakan $post->image --}}
+        @if ($post->image)
+            <img src="{{ asset('storage/' . $post->image) }}" class="w-full h-full object-cover fixed-parallax">
         @else
             <div class="w-full h-full bg-slate-800 flex items-center justify-center">
                 <span class="text-white font-bold">No Image Available</span>
@@ -60,7 +61,7 @@
                         {!! nl2br(e($post->content)) !!}
                     </article>
 
-                    {{-- Tombol Share (Opsional) --}}
+                    {{-- Tombol Share --}}
                     <div class="mt-12 pt-8 border-t border-gray-100">
                         <h4 class="font-bold text-slate-800 mb-4">Bagikan Berita Ini:</h4>
                         <div class="flex gap-2">
@@ -91,8 +92,9 @@
                                 <a href="{{ route('public.news.show', $recent->slug) }}"
                                     class="group flex gap-4 items-start">
                                     <div class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-slate-200">
-                                        @if ($recent->image_path)
-                                            <img src="{{ asset('storage/' . $recent->image_path) }}"
+                                        {{-- PERBAIKAN: Gunakan $recent->image --}}
+                                        @if ($recent->image)
+                                            <img src="{{ asset('storage/' . $recent->image) }}"
                                                 class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
                                         @else
                                             <div

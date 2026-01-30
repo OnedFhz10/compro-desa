@@ -67,11 +67,18 @@
                                         <li
                                             class="flex items-center justify-between text-sm bg-white p-2.5 rounded-lg border border-slate-100">
                                             <span class="font-bold text-blue-600">RT {{ $rt->rt }}</span>
-                                            <span
-                                                class="text-slate-500 text-xs uppercase font-medium truncate max-w-[100px]"
-                                                title="{{ $rt->ketua_rt }}">
-                                                {{ $rt->ketua_rt ?? 'Ketua -' }}
-                                            </span>
+
+                                            <div class="text-right">
+                                                {{-- PERBAIKAN: Gunakan head_name (sesuai controller) --}}
+                                                <span class="block text-slate-700 font-medium truncate max-w-[120px]"
+                                                    title="{{ $rt->head_name }}">
+                                                    {{ $rt->head_name ?? '-' }}
+                                                </span>
+
+                                                @if ($rt->phone)
+                                                    <span class="text-xs text-slate-400">{{ $rt->phone }}</span>
+                                                @endif
+                                            </div>
                                         </li>
                                     @endforeach
                                 </ul>

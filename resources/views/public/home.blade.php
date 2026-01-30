@@ -13,7 +13,7 @@
                 alt="Desa View" class="w-full h-full object-cover opacity-60">
         </div>
 
-        <div class="container mx-auto px-4 lg:px-8 relative z-20 pt-10 pb-32 lg:pb-10"> {{-- pb ditambah agar ada ruang untuk stats --}}
+        <div class="container mx-auto px-4 lg:px-8 relative z-20 pt-10 pb-32 lg:pb-10">
             <div class="max-w-3xl">
                 <span
                     class="inline-block py-1 px-3 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-bold tracking-wider mb-6 backdrop-blur-sm animate-fade-in-up">
@@ -44,7 +44,7 @@
         </div>
     </section>
 
-    {{-- 2. STATISTIK FLOATING CARDS (Posisi Naik ke Atas Menumpuk Hero) --}}
+    {{-- 2. STATISTIK FLOATING CARDS --}}
     <section class="relative z-30 -mt-20 lg:-mt-24 mb-12">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -93,9 +93,8 @@
         </div>
     </section>
 
-    {{-- 3. WIDGET LACAK LAYANAN (Posisi Sekarang DI BAWAH STATISTIK) --}}
+    {{-- 3. WIDGET LACAK LAYANAN --}}
     <section class="mb-20 container mx-auto px-4 lg:px-8">
-        {{-- Kita beri background tipis agar terlihat seperti area khusus --}}
         <div
             class="bg-blue-50/50 border border-blue-100 p-6 lg:p-8 rounded-[2.5rem] flex flex-col lg:flex-row items-center gap-6 animate-fade-in-up animation-delay-400">
             <div class="flex items-center gap-4 px-2 w-full lg:w-auto">
@@ -129,10 +128,11 @@
     <section class="py-20 bg-white border-y border-slate-100">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex flex-col lg:flex-row items-center gap-12">
-                {{-- Foto Kades (LAZY LOAD) --}}
+                {{-- Foto Kades --}}
                 <div class="w-full lg:w-5/12 relative">
                     <div class="absolute inset-0 bg-blue-600 rounded-[3rem] transform rotate-3 opacity-10"></div>
                     <div class="relative rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white">
+                        {{-- PERBAIKAN: Gunakan image_path (sesuai controller Perangkat Desa) --}}
                         @if ($kades?->image_path)
                             <img src="{{ asset('storage/' . $kades->image_path) }}" alt="{{ $kades->name }}" loading="lazy"
                                 class="w-full h-auto object-cover transform hover:scale-105 transition duration-700">
@@ -192,8 +192,9 @@
                                 class="absolute top-4 left-4 bg-white/90 backdrop-blur text-blue-700 text-xs font-bold px-3 py-1 rounded-full z-10 shadow-sm uppercase">
                                 {{ $post->category?->name ?? 'Umum' }}
                             </span>
-                            @if ($post->image_path)
-                                <img src="{{ asset('storage/' . $post->image_path) }}" loading="lazy"
+                            {{-- PERBAIKAN: Gunakan $post->image (sesuai controller Post) --}}
+                            @if ($post->image)
+                                <img src="{{ asset('storage/' . $post->image) }}" loading="lazy"
                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-slate-400 font-bold">No
@@ -241,8 +242,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach ($potentials as $item)
                         <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer">
-                            @if ($item->image_path)
-                                <img src="{{ asset('storage/' . $item->image_path) }}" loading="lazy"
+                            {{-- PERBAIKAN: Gunakan $item->image (sesuai controller Potensi) --}}
+                            @if ($item->image)
+                                <img src="{{ asset('storage/' . $item->image) }}" loading="lazy"
                                     class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110">
                             @else
                                 <div class="absolute inset-0 bg-slate-800 flex items-center justify-center">No Image</div>

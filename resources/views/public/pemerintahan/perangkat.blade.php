@@ -34,8 +34,9 @@
 
                         {{-- Foto --}}
                         <div class="relative h-72 overflow-hidden bg-slate-100">
-                            @if ($official->image)
-                                <img src="{{ asset('storage/' . $official->image) }}" alt="{{ $official->name }}"
+                            {{-- PERBAIKAN: Gunakan $official->image_path --}}
+                            @if ($official->image_path)
+                                <img src="{{ asset('storage/' . $official->image_path) }}" alt="{{ $official->name }}"
                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                             @else
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($official->name) }}&background=random&size=256"
@@ -49,7 +50,8 @@
                             <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
                                 <h3 class="text-xl font-bold leading-tight mb-1">{{ $official->name }}</h3>
                                 <p class="text-blue-300 font-medium text-sm uppercase tracking-wide">
-                                    {{ $official->position }}</p>
+                                    {{ $official->position }}
+                                </p>
                             </div>
                         </div>
 

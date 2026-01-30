@@ -9,6 +9,11 @@ class Neighborhood extends Model
 {
     use HasFactory;
 
-    protected $table = 'neighborhoods';
-    protected $guarded = ['id']; // PENTING: Agar bisa create() data
+    protected $fillable = [
+        'dusun',
+        'rw',
+        'rt',
+        'head_name', // Nama Ketua RT/RW
+        'phone',
+    ];
 }

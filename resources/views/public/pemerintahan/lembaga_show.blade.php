@@ -35,6 +35,7 @@
                     {{-- Logo / Gambar --}}
                     <div class="w-full lg:w-1/3">
                         <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 shadow-lg text-center">
+                            {{-- SINKRONISASI: Pastikan menggunakan image_path --}}
                             @if ($institution->image_path)
                                 <img src="{{ asset('storage/' . $institution->image_path) }}"
                                     class="w-48 h-48 mx-auto object-contain mb-6">
@@ -54,7 +55,8 @@
                     <div class="w-full lg:w-2/3">
                         <div class="prose prose-lg prose-slate max-w-none text-slate-600 leading-relaxed">
                             <h3 class="font-bold text-slate-900">Tentang Lembaga</h3>
-                            <p>{{ $institution->description }}</p>
+                            {{-- PERBAIKAN: Tambahkan nl2br agar paragraf terbaca --}}
+                            <p>{!! nl2br(e($institution->description)) !!}</p>
                         </div>
 
                         <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">

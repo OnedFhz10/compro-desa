@@ -34,8 +34,9 @@
                     {{-- Logo --}}
                     <div
                         class="w-24 h-24 mb-6 rounded-2xl bg-slate-50 p-4 border border-slate-100 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors">
-                        @if ($item->logo)
-                            <img src="{{ asset('storage/' . $item->logo) }}" alt="{{ $item->name }}"
+                        {{-- PERBAIKAN: Gunakan $item->image_path --}}
+                        @if ($item->image_path)
+                            <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->name }}"
                                 class="w-full h-full object-contain">
                         @else
                             <svg class="w-full h-full text-slate-300 group-hover:text-blue-400 transition-colors"

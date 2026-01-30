@@ -32,15 +32,16 @@
         <div
             class="bg-white rounded-3xl shadow-xl shadow-slate-200/50 p-4 lg:p-8 border border-gray-100 animate-fade-in-up animation-delay-500">
 
-            @if ($profile && $profile->structure_image)
+            {{-- PERBAIKAN: Gunakan structure_image_path (sesuai database/controller) --}}
+            @if ($profile && $profile->structure_image_path)
                 <div class="relative w-full overflow-hidden rounded-2xl group">
-                    <img src="{{ asset('storage/' . $profile->structure_image) }}" alt="Struktur Organisasi"
+                    <img src="{{ asset('storage/' . $profile->structure_image_path) }}" alt="Struktur Organisasi"
                         class="w-full h-auto object-contain">
 
                     {{-- Tombol Zoom --}}
                     <div
                         class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <a href="{{ asset('storage/' . $profile->structure_image) }}" target="_blank"
+                        <a href="{{ asset('storage/' . $profile->structure_image_path) }}" target="_blank"
                             class="bg-white text-slate-900 px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-50 transition transform hover:scale-105">
                             Lihat Ukuran Penuh
                         </a>

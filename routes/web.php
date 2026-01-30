@@ -1,19 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
+
+// 1. Controller Publik & Auth (Tetap di folder utama)
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\VillageProfileController;
-use App\Http\Controllers\VillageOfficialController;
-use App\Http\Controllers\VillagePotentialController;
-use App\Http\Controllers\VillageInstitutionController;
-use App\Http\Controllers\BudgetController;
-use App\Http\Controllers\LetterRequestController;
-use App\Http\Controllers\NeighborhoodController;
+
+// 2. Controller Admin (Namespace Baru, kita beri alias 'Admin')
+use App\Http\Controllers\Admin as Admin;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +17,12 @@ use App\Http\Controllers\NeighborhoodController;
 */
 
 // ==========================================================
-// 1. ROUTE PUBLIK (Bisa diakses siapa saja)
+// A. ROUTE PUBLIK (Bisa diakses siapa saja)
 // ==========================================================
 
 Route::controller(PublicController::class)->group(function () {
     
-    // Menu Utama
+    // Halaman Utama & Statis
     Route::get('/', 'index')->name('home');
     Route::get('/profil', 'profile')->name('public.profile');
     Route::get('/kontak', 'contact')->name('public.contact');
@@ -63,34 +58,25 @@ Route::controller(PublicController::class)->group(function () {
         Route::get('/realisasi', 'realisasi')->name('public.transparency.realisasi');
         Route::get('/laporan', 'laporan')->name('public.transparency.laporan');
     });
-
 }); 
 
 
 // ==========================================================
-// 2. ROUTE LAYANAN PUBLIK (Dipisah agar lebih rapi)
+// B. ROUTE LAYANAN MANDIRI (Warga)
 // ==========================================================
 
 Route::controller(ServiceController::class)->prefix('layanan')->group(function() {
-    
-    // Surat Online
     Route::get('/surat-online', 'indexSurat')->name('public.layanan.surat');
     Route::post('/surat-online', 'storeSurat')->name('public.layanan.surat.store');
-
-    // Cek Status
     Route::get('/cek-status', 'indexStatus')->name('public.layanan.status');
-
-    // Pengaduan
     Route::get('/pengaduan', 'indexPengaduan')->name('public.layanan.pengaduan');
     Route::post('/pengaduan', 'storePengaduan')->name('public.layanan.pengaduan.store');
-
-    // FAQ
     Route::get('/faq', 'indexFaq')->name('public.layanan.faq');
 });
 
 
 // ==========================================================
-// 3. ROUTE TAMU (Login)
+// C. ROUTE AUTH (Login & Logout)
 // ==========================================================
 
 Route::middleware('guest')->group(function () {
@@ -98,46 +84,43 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 });
 
-
-// ==========================================================
-// 4. ROUTE LOGOUT
-// ==========================================================
-
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout')
     ->middleware('auth');
 
 
 // ==========================================================
-// 5. ROUTE ADMIN (Hanya user login)
+// D. ROUTE ADMIN PANEL (Hanya User Login)
 // ==========================================================
 
-Route::middleware('auth')->prefix('admin')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     
-    // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    // 1. Dashboard
+    Route::get('/dashboard', [Admin\DashboardController::class, 'index'])->name('dashboard');
 
-    // 1. ROUTE KHUSUS UPLOAD STRUKTUR (Tambahkan ini DI ATAS resource officials)
-    Route::put('/officials/structure', [VillageOfficialController::class, 'updateStructure'])
-        ->name('admin.officials.structure');
+    // 2. Profil Desa (Single Record)
+    Route::get('/profile', [Admin\VillageProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [Admin\VillageProfileController::class, 'update'])->name('profile.update');
+    
+    // 3. Update Bagan Struktur (Custom Route di atas Resource)
+    Route::put('/officials/structure', [Admin\VillageOfficialController::class, 'updateStructure'])
+        ->name('officials.structure');
 
-    // Profil Desa (Single Record Update)
-    Route::get('/profile', [VillageProfileController::class, 'edit'])->name('admin.profile.edit');
-    Route::put('/profile', [VillageProfileController::class, 'update'])->name('admin.profile.update');
+    // 4. Manajemen Resource (CRUD Otomatis)
+    // Route::resource membuat index, create, store, edit, update, destroy sekaligus.
+    Route::resource('posts', Admin\PostController::class);
+    Route::resource('galleries', Admin\GalleryController::class);
+    
+    // --> PENAMBAHAN ROUTE AGENDA <--
+    Route::resource('agendas', Admin\AgendaController::class);
 
-    // Transparansi / APBDes
-    Route::resource('/budgets', BudgetController::class)->names('admin.budgets');
+    Route::resource('officials', Admin\VillageOfficialController::class);
+    Route::resource('potentials', Admin\VillagePotentialController::class);
+    Route::resource('institutions', Admin\VillageInstitutionController::class);
+    Route::resource('neighborhoods', Admin\NeighborhoodController::class);
+    Route::resource('budgets', Admin\BudgetController::class);
 
-    // Resource Controllers (CRUD)
-    Route::resource('/posts', PostController::class)->names('admin.posts');
-    Route::resource('/galleries', GalleryController::class)->names('admin.galleries');
-    Route::resource('/officials', VillageOfficialController::class)->names('admin.officials');
-    Route::resource('/potentials', VillagePotentialController::class)->names('admin.potentials');
-    Route::resource('/institutions', VillageInstitutionController::class)->names('admin.institutions');
-    Route::resource('/neighborhoods', NeighborhoodController::class)->names('admin.neighborhoods');
-
-    // Layanan Surat (Admin hanya memproses, tidak create)
-    Route::resource('/letters', LetterRequestController::class)
-        ->names('admin.letters')
-        ->except(['create', 'store', 'edit']); 
+    // 5. Layanan Surat (Admin hanya memproses, tidak create)
+    Route::resource('letters', Admin\LetterRequestController::class)
+        ->except(['create', 'store', 'edit']); // Admin tidak perlu form create surat
 });

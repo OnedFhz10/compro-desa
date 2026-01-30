@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Neighborhood;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,7 @@ class NeighborhoodController extends Controller
             'dusun'     => 'required|string',
             'rw'        => 'required|string',
             'rt'        => 'required|string',
-            'head_name' => 'required|string', // PERBAIKAN: Gunakan head_name
+            'head_name' => 'required|string',
             'phone'     => 'nullable|string',
         ]);
 
@@ -48,7 +49,7 @@ class NeighborhoodController extends Controller
             'dusun'     => 'required|string',
             'rw'        => 'required|string',
             'rt'        => 'required|string',
-            'head_name' => 'required|string', // PERBAIKAN
+            'head_name' => 'required|string',
             'phone'     => 'nullable|string',
         ]);
 
