@@ -25,51 +25,69 @@
     </section>
 
     {{-- 2. CONTENT LIST PERANGKAT --}}
-    <div class="container mx-auto px-4 lg:px-8 pb-20 relative z-30 -mt-20">
-        @if ($officials->count() > 0)
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                @foreach ($officials as $official)
-                    <div
-                        class="group bg-white rounded-3xl shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden animate-fade-in-up">
+    <div class="bg-gray-50 py-20 min-h-screen">
+        <div class="container mx-auto px-4 lg:px-8">
 
-                        {{-- Foto --}}
-                        <div class="relative h-72 overflow-hidden bg-slate-100">
-                            {{-- PERBAIKAN: Gunakan $official->image_path --}}
-                            @if ($official->image_path)
-                                <img src="{{ asset('storage/' . $official->image_path) }}" alt="{{ $official->name }}"
-                                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                            @else
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($official->name) }}&background=random&size=256"
-                                    class="w-full h-full object-cover">
-                            @endif
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80">
+            @if ($officials->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    @foreach ($officials as $official)
+                        <div
+                            class="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border border-slate-100 flex flex-col items-center text-center relative overflow-hidden animate-fade-in-up">
+
+                            {{-- Dekorasi Background Atas (Agar terlihat modern) --}}
+                            <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-blue-50 to-transparent">
                             </div>
 
-                            {{-- Teks di atas foto (posisi bawah) --}}
-                            <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                <h3 class="text-xl font-bold leading-tight mb-1">{{ $official->name }}</h3>
-                                <p class="text-blue-300 font-medium text-sm uppercase tracking-wide">
+                            {{-- FOTO BULAT (LINGKARAN) --}}
+                            <div class="relative z-10 mb-6">
+                                <div
+                                    class="w-40 h-40 rounded-full p-1.5 bg-white shadow-md border border-slate-200 group-hover:scale-105 transition-transform duration-300">
+                                    <div class="w-full h-full rounded-full overflow-hidden relative">
+                                        {{-- LOGIKA GAMBAR (Sesuai kode asli Anda) --}}
+                                        @if ($official->image_path)
+                                            <img src="{{ asset('storage/' . $official->image_path) }}"
+                                                alt="{{ $official->name }}" class="w-full h-full object-cover">
+                                        @else
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($official->name) }}&background=random&size=256"
+                                                alt="{{ $official->name }}" class="w-full h-full object-cover">
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- INFORMASI TEXT --}}
+                            <div class="relative z-10 w-full">
+                                <h3
+                                    class="text-xl font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">
+                                    {{ $official->name }}
+                                </h3>
+                                <p class="text-blue-500 font-bold text-xs uppercase tracking-widest mb-4">
                                     {{ $official->position }}
                                 </p>
-                            </div>
-                        </div>
 
-                        {{-- Info Tambahan (NIP/Telp jika ada) --}}
-                        @if ($official->nip || $official->phone)
-                            <div class="p-4 bg-white border-t border-slate-100">
+                                {{-- Garis Pembatas Kecil --}}
+                                <div class="w-10 h-1 bg-slate-200 mx-auto mb-4 rounded-full"></div>
+
+                                {{-- NIP / Kontak --}}
                                 @if ($official->nip)
-                                    <p class="text-xs text-slate-500 font-mono text-center">NIP: {{ $official->nip }}</p>
+                                    <span
+                                        class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-mono rounded-full border border-slate-200">
+                                        NIP: {{ $official->nip }}
+                                    </span>
                                 @endif
                             </div>
-                        @endif
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <div class="bg-white rounded-3xl p-12 text-center shadow-lg">
-                <p class="text-slate-500 text-lg">Data perangkat desa belum tersedia.</p>
-            </div>
-        @endif
+
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="bg-white rounded-3xl p-12 text-center shadow-lg border border-slate-100">
+                    <div class="text-6xl mb-4">👥</div>
+                    <h3 class="text-xl font-bold text-slate-700">Data Belum Tersedia</h3>
+                    <p class="text-slate-500 mt-2">Daftar perangkat desa belum ditambahkan oleh admin.</p>
+                </div>
+            @endif
+
+        </div>
     </div>
 @endsection

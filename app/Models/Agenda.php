@@ -13,12 +13,15 @@ class Agenda extends Model
         'title',
         'slug',
         'description',
-        'event_date', // Kolom untuk tanggal & jam acara
-        'location',   // Kolom lokasi
+        'date',
+        'time',
+        'location',
+        'is_active'
     ];
 
-    // Opsional: Casting agar event_date otomatis jadi objek Carbon (mudah diformat tgl/jam)
+    // Casting date agar bisa diformat di view
     protected $casts = [
-        'event_date' => 'datetime',
+        'date' => 'date',
+        'is_active' => 'boolean',
     ];
 }

@@ -14,10 +14,15 @@ class Post extends Model
         'slug', 
         'category_id', 
         'content', 
-        'image_path',   // <--- PASTIKAN INI image_path
-        'excerpt',      // Tambahan dari migration
+        'image_path', 
+        'excerpt',
         'user_id',
         'is_published'
+    ];
+
+    // Tambahkan Casts agar is_published jadi boolean
+    protected $casts = [
+        'is_published' => 'boolean',
     ];
 
     public function category()
@@ -28,5 +33,13 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // --- PERBAIKAN UTAMA: ACCESSOR ---
+    // Ini membuat panggilan $post->image di view public (show.blade.php)
+    // otomatis mengambil nilai dari kolom 'image_path' database.
+    public function getImageAttribute()
+    {
+        return $this->image_path;
     }
 }

@@ -57,10 +57,9 @@ class PublicController extends Controller
     // 5. Agenda
     public function agenda()
     {
-        $agendas = Agenda::where('event_date', '>=', now())
-                        ->orderBy('event_date', 'asc')
-                        ->paginate(9);
-                        
+        // Menampilkan semua agenda, terbaru paling atas
+        $agendas = Agenda::orderBy('date', 'desc')->paginate(9);
+        
         return view('public.informasi.agenda', compact('agendas'));
     }
 

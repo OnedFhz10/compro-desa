@@ -10,14 +10,14 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    // Cek dulu, jika kolom 'category' BELUM ada, baru tambahkan
-    if (!Schema::hasColumn('budgets', 'category')) {
+    {
         Schema::table('budgets', function (Blueprint $table) {
-            $table->string('category')->default('apbdes')->after('year');
+            // Kita tambahkan kolom category setelah kolom year
+            // Gunakan nullable() dulu agar data lama tidak error, atau beri default 'apbdes'
+            $table->string('category')->default('apbdes')->after('year'); 
         });
     }
-}
+
     /**
      * Reverse the migrations.
      */

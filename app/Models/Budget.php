@@ -11,10 +11,33 @@ class Budget extends Model
 
     protected $fillable = [
         'year',
-        'category',    // <--- PASTIKAN INI ADA
-        'type',
+        'category',    // apbdes, realisasi, laporan
+        'type',        // income (pendapatan), expense (belanja)
         'amount',
         'description',
-        'file_path',
+        'file_path'
     ];
+
+    // Format angka ke format Rupiah otomatis
+    public function getFormattedAmountAttribute()
+    {
+        return 'Rp ' . number_format($this->amount, 0, ',', '.');
+    }
+
+    // Label untuk Type (Income/Expense)
+    public function getTypeLabelAttribute()
+    {
+        return $this->type === 'income' ? 'Pendapatan' : 'Belanja';
+    }
+    
+    // Label untuk Category
+    public function getCategoryLabelAttribute()
+    {
+        return match($this->category) {
+            'apbdes' => 'APBDes',
+            'realisasi' => 'Realisasi Anggaran',
+            'laporan' => 'Laporan Keuangan',
+            default => ucfirst($this->category),
+        };
+    }
 }

@@ -9,80 +9,76 @@ use Illuminate\Support\Str;
 
 class AgendaController extends Controller
 {
-    /**
-     * Tampilkan daftar agenda (Read)
-     */
     public function index()
     {
-        // Ambil data terbaru, 10 per halaman
-        $agendas = Agenda::latest()->paginate(10);
+        // Tampilkan agenda, urutkan dari yang terbaru (atau terdekat)
+        $agendas = Agenda::orderBy('date', 'desc')->paginate(10);
         return view('admin.agendas.index', compact('agendas'));
     }
 
-    /**
-     * Tampilkan form tambah (Create View)
-     */
     public function create()
     {
         return view('admin.agendas.create');
     }
 
-    /**
-     * Simpan data agenda ke database (Store)
-     */
     public function store(Request $request)
     {
-        // Validasi Input
+        // 1. Validasi Input
         $request->validate([
             'title'       => 'required|max:255',
             'description' => 'required',
-            'event_date'  => 'required|date',
-            'location'    => 'nullable|string|max:255',
+            'date'        => 'required|date',
+            'time'        => 'required|string|max:100', // misal: "08:00 - Selesai"
+            'location'    => 'required|string|max:255',
         ]);
 
+        // 2. Siapkan Data
         $data = $request->all();
-        // Buat slug otomatis dari judul (contoh: Kerja Bakti -> kerja-bakti)
-        $data['slug'] = Str::slug($request->title);
+        
+        // Buat Slug otomatis dari Judul
+        $data['slug'] = Str::slug($request->title) . '-' . Str::random(5);
+        
+        // Cek status aktif (checkbox)
+        // Jika dicentang bernilai 1, jika tidak ada (tidak dicentang) dianggap 0
+        $data['is_active'] = $request->has('is_active');
 
+        // 3. Simpan ke Database
         Agenda::create($data);
 
-        return redirect()->route('admin.agendas.index')->with('success', 'Agenda berhasil ditambahkan!');
+        // 4. Redirect kembali ke index
+        return redirect()->route('admin.agendas.index')->with('success', 'Agenda berhasil ditambahkan.');
     }
 
-    /**
-     * Tampilkan form edit (Edit View)
-     */
     public function edit(Agenda $agenda)
     {
         return view('admin.agendas.edit', compact('agenda'));
     }
 
-    /**
-     * Update data agenda (Update)
-     */
     public function update(Request $request, Agenda $agenda)
     {
         $request->validate([
             'title'       => 'required|max:255',
             'description' => 'required',
-            'event_date'  => 'required|date',
-            'location'    => 'nullable|string|max:255',
+            'date'        => 'required|date',
+            'time'        => 'required|string|max:100',
+            'location'    => 'required|string|max:255',
         ]);
 
         $data = $request->all();
-        $data['slug'] = Str::slug($request->title);
+        
+        // Update slug jika judul berubah (opsional, tapi disarankan tidak berubah agar SEO aman)
+        // $data['slug'] = Str::slug($request->title); 
+
+        $data['is_active'] = $request->has('is_active');
 
         $agenda->update($data);
 
-        return redirect()->route('admin.agendas.index')->with('success', 'Agenda berhasil diperbarui!');
+        return redirect()->route('admin.agendas.index')->with('success', 'Agenda berhasil diperbarui.');
     }
 
-    /**
-     * Hapus agenda (Delete)
-     */
     public function destroy(Agenda $agenda)
     {
         $agenda->delete();
-        return redirect()->route('admin.agendas.index')->with('success', 'Agenda telah dihapus.');
+        return redirect()->route('admin.agendas.index')->with('success', 'Agenda dihapus.');
     }
 }
