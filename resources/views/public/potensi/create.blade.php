@@ -51,8 +51,8 @@
             <div class="mb-6">
                 <label class="block mb-2 text-sm font-medium text-gray-300">Deskripsi Lengkap <span
                         class="text-red-500">*</span></label>
-                <textarea name="description" rows="6" placeholder="Jelaskan detail potensi, sejarah, atau keunggulannya..."
-                    required class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg w-full p-2.5">{{ old('description') }}</textarea>
+                <textarea name="description" rows="6" placeholder="Jelaskan tentang potensi ini..." required
+                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg w-full p-2.5">{{ old('description') }}</textarea>
             </div>
 
             {{-- Upload Gambar --}}

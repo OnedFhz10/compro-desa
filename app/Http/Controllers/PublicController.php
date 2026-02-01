@@ -11,30 +11,38 @@ use App\Models\VillageInstitution;
 use App\Models\Neighborhood;
 use App\Models\Agenda;
 use App\Models\Budget;
-// Note: VillageProfile tidak perlu di-use lagi jika tidak dipakai logika khusus
 
 class PublicController extends Controller
 {
-    // 1. Halaman Beranda (Home)
+    // =================================================================
+    // HALAMAN UTAMA & PROFIL
+    // =================================================================
+
     public function index()
     {
-        // $profile otomatis disuntikkan oleh AppServiceProvider
-        
+        // Mengambil data Kepala Desa
         $kades = VillageOfficial::where('position', 'like', '%Kepala Desa%')->first();
+        
+        // Berita Terkini (3 item)
         $latestPosts = Post::with('category')->latest()->take(3)->get(); 
+        
+        // Potensi Random (3 item)
         $potentials = VillagePotential::inRandomOrder()->take(3)->get(); 
 
         return view('public.home', compact('latestPosts', 'potentials', 'kades'));
     }
 
-    // 2. Halaman Profil Desa
     public function profile()
     {
+        // Di halaman profil biasanya ada sidebar potensi
         $potentials = VillagePotential::inRandomOrder()->take(3)->get();
         return view('public.profile', compact('potentials'));
     }
 
-    // 3. Halaman Daftar Berita
+    // =================================================================
+    // INFORMASI (Berita, Pengumuman, Agenda, Galeri)
+    // =================================================================
+
     public function news()
     {
         $posts = Post::whereHas('category', function($q){
@@ -44,7 +52,6 @@ class PublicController extends Controller
         return view('public.informasi.berita', compact('posts'));
     }
 
-    // 4. Pengumuman
     public function announcements()
     {
         $posts = Post::whereHas('category', function($q){
@@ -54,27 +61,25 @@ class PublicController extends Controller
         return view('public.informasi.pengumuman', compact('posts'));
     }
 
-    // 5. Agenda
     public function agenda()
     {
-        // Menampilkan semua agenda, terbaru paling atas
+        // Menampilkan agenda, yang terbaru (berdasarkan tanggal acara) paling atas
         $agendas = Agenda::orderBy('date', 'desc')->paginate(9);
         
         return view('public.informasi.agenda', compact('agendas'));
     }
 
-    // 6. Galeri
     public function gallery()
     {
         $galleries = Gallery::latest()->paginate(12);
         return view('public.informasi.galeri', compact('galleries'));
     }
 
-    // 7. Detail Berita
     public function newsDetail($slug)
     {
         $post = Post::with('category', 'user')->where('slug', $slug)->firstOrFail();
         
+        // Sidebar berita terbaru selain yang sedang dibuka
         $recentPosts = Post::where('id', '!=', $post->id)
                            ->with('category')
                            ->latest()
@@ -84,63 +89,56 @@ class PublicController extends Controller
         return view('public.informasi.show', compact('post', 'recentPosts'));
     }
 
-    // 8. Semua Potensi
-    public function potentials()
+    // =================================================================
+    // POTENSI DESA (Sudah Diperbaiki Pagination-nya)
+    // =================================================================
+
+    public function potential()
     {
+        // FIX: Menggunakan paginate() agar method links() di view bekerja
         $potentials = VillagePotential::latest()->paginate(9);
-        $pageTitle = 'Semua Potensi Desa';
-        $pageDescription = 'Jelajahi seluruh kekayaan alam, produk, dan usaha lokal desa kami.';
-        
-        return view('public.potensi.index', compact('potentials', 'pageTitle', 'pageDescription'));
+
+        // Mengambil kategori unik untuk filter di frontend
+        $categories = VillagePotential::select('category')->distinct()->pluck('category');
+
+        return view('public.potensi.index', compact('potentials', 'categories'));
     }
 
-    // 9. Potensi Kategori
-    public function potentialsByCategory($slug)
+    // Method tambahan untuk fitur Filter via URL (jika dropdown navbar diklik)
+    // Opsional: Jika Anda ingin route('public.potentials.category') bekerja
+    public function potentialByCategory($category)
     {
-        $categories = [
-            'wisata' => 'Wisata',
-            'umkm'   => 'UMKM',
-            'produk' => 'Produk'
-        ];
-
-        $categoryName = $categories[$slug] ?? abort(404);
-
-        $potentials = VillagePotential::where('category', $categoryName)
-                            ->latest()
-                            ->paginate(9);
-
-        $titles = [
-            'wisata' => 'Destinasi Wisata',
-            'umkm'   => 'UMKM Desa',
-            'produk' => 'Produk Unggulan'
-        ];
+        $potentials = VillagePotential::where('category', $category)->latest()->paginate(9);
+        $categories = VillagePotential::select('category')->distinct()->pluck('category');
         
-        $descriptions = [
-            'wisata' => 'Temukan keindahan alam dan spot menarik untuk berlibur.',
-            'umkm'   => 'Dukung ekonomi lokal dengan mengenal usaha mikro kecil menengah warga.',
-            'produk' => 'Berbagai hasil bumi dan kerajinan tangan asli buatan desa.'
-        ];
-
-        $pageTitle = $titles[$slug];
-        $pageDescription = $descriptions[$slug];
-
-        return view('public.potensi.index', compact('potentials', 'pageTitle', 'pageDescription', 'slug'));
+        // Kita gunakan view yang sama (index), tapi datanya sudah difilter
+        return view('public.potensi.index', compact('potentials', 'categories'));
     }
 
-    // 10. Struktur Organisasi
+    public function showPotential($slug)
+    {
+        $potential = VillagePotential::where('slug', $slug)->firstOrFail();
+        $others = VillagePotential::where('id', '!=', $potential->id)->inRandomOrder()->limit(3)->get();
+
+        return view('public.potensi.show', compact('potential', 'others'));
+    }
+
+    // =================================================================
+    // PEMERINTAHAN
+    // =================================================================
+
     public function structure()
     {
         return view('public.pemerintahan.struktur');
     }
 
-    // 11. Perangkat Desa
     public function officials()
     {
+        // Urutkan berdasarkan ID atau hierarki jabatan jika ada kolom 'order'
         $officials = VillageOfficial::orderBy('id', 'asc')->get();
         return view('public.pemerintahan.perangkat', compact('officials'));
     }
 
-    // 12. Lembaga Desa
     public function institutions()
     {
         $institutions = VillageInstitution::all();
@@ -149,21 +147,28 @@ class PublicController extends Controller
 
     public function showInstitution($slug)
     {
-        $institution = VillageInstitution::where('name', 'like', '%' . $slug . '%')->first();
-        $pageTitle = strtoupper(str_replace('-', ' ', $slug));
+        // Note: Logic ini mencari berdasarkan nama yang mirip slug. 
+        // Idealnya tabel village_institutions punya kolom 'slug'.
+        $name = str_replace('-', ' ', $slug);
+        $institution = VillageInstitution::where('name', 'like', '%' . $name . '%')->firstOrFail();
+        
+        $pageTitle = $institution->name;
         
         return view('public.pemerintahan.lembaga_show', compact('institution', 'pageTitle'));
     }
 
-    // 13. RT / RW
     public function rtrw()
     {
+        // Grouping data RT/RW berdasarkan Dusun -> RW
         $neighborhoods = Neighborhood::orderBy('dusun')->orderBy('rw')->orderBy('rt')->get()
-                                         ->groupBy(['dusun', 'rw']);
+                                     ->groupBy(['dusun', 'rw']);
         return view('public.pemerintahan.rt_rw', compact('neighborhoods'));
     }
 
-    // 14. Transparansi (APBDes)
+    // =================================================================
+    // TRANSPARANSI
+    // =================================================================
+
     public function apbdes()
     {
         $data = Budget::where('category', 'apbdes')->orderBy('year', 'desc')->get();
@@ -182,12 +187,37 @@ class PublicController extends Controller
         return view('public.transparansi.laporan', compact('data'));
     }
 
+    // =================================================================
+    // LAYANAN WARGA (YANG HILANG SEBELUMNYA)
+    // =================================================================
+
+    public function layananSurat()
+    {
+        // Pastikan Anda membuat file view: resources/views/public/layanan/surat.blade.php
+        return view('public.layanan.surat');
+    }
+
+    public function layananStatus()
+    {
+        // Pastikan Anda membuat file view: resources/views/public/layanan/status.blade.php
+        return view('public.layanan.status');
+    }
+
+    public function layananPengaduan()
+    {
+        // Pastikan Anda membuat file view: resources/views/public/layanan/pengaduan.blade.php
+        return view('public.layanan.pengaduan');
+    }
+
+    // =================================================================
+    // KONTAK & PENCARIAN
+    // =================================================================
+
     public function contact()
     {
         return view('public.kontak');
     }
 
-    // 15. Pencarian
     public function search(Request $request)
     {
         $query = $request->input('q');
@@ -196,16 +226,18 @@ class PublicController extends Controller
             return redirect()->route('home');
         }
 
+        // Pencarian di Berita
         $posts = Post::where('title', 'like', "%{$query}%")
-                    ->orWhere('content', 'like', "%{$query}%")
-                    ->with('category')
-                    ->latest()
-                    ->get();
+                     ->orWhere('content', 'like', "%{$query}%")
+                     ->with('category')
+                     ->latest()
+                     ->get();
 
+        // Pencarian di Potensi
         $potentials = VillagePotential::where('title', 'like', "%{$query}%")
-                    ->orWhere('description', 'like', "%{$query}%")
-                    ->latest()
-                    ->get();
+                                      ->orWhere('description', 'like', "%{$query}%")
+                                      ->latest()
+                                      ->get();
 
         return view('public.informasi.pencarian', compact('query', 'posts', 'potentials'));
     }

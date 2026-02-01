@@ -1,80 +1,133 @@
 @extends('layouts.app')
 
-@section('title', $pageTitle ?? 'Potensi Desa')
-@section('meta_description', $pageDescription ?? 'Jelajahi potensi wisata, produk unggulan, dan UMKM desa kami.')
+@section('title', 'Potensi Desa')
 
 @section('content')
-    {{-- HEADER --}}
-    <section class="bg-slate-900 py-24 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <span class="text-emerald-400 font-bold tracking-widest text-sm uppercase mb-3 block">Kekayaan Lokal</span>
-            <h1 class="text-4xl lg:text-6xl font-extrabold text-white mb-6">
-                {{ $pageTitle ?? 'Potensi & Wisata Desa' }}
+    {{-- 1. HERO HEADER --}}
+    <section class="relative bg-slate-900 h-[400px] flex items-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-amber-900/30 z-10"></div>
+            <img src="https://images.unsplash.com/photo-1605000797499-95a059e5e5c8?q=80&w=2940&auto=format&fit=crop"
+                alt="Potensi Background" class="w-full h-full object-cover opacity-40">
+        </div>
+
+        <div class="container mx-auto px-4 lg:px-8 relative z-20 text-center pt-10">
+            <span class="text-amber-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">
+                Kekayaan & Unggulan Desa
+            </span>
+            <h1
+                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
+                Potensi Desa
             </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto">
-                {{ $pageDescription ?? 'Temukan pesona alam, produk kreatif, dan semangat wirausaha warga desa.' }}
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+                Menjelajahi keunggulan ekonomi, pariwisata, hasil bumi, dan produk kreatif UMKM di
+                {{ $profile?->village_name ?? 'Desa' }}.
             </p>
         </div>
     </section>
 
-    {{-- LIST POTENSI --}}
-    <section class="py-16 bg-gray-50 min-h-screen">
+    {{-- 2. LIST POTENSI --}}
+    <div class="bg-gray-50 py-20 min-h-screen relative z-30 -mt-10 pt-10" x-data="{ activeCategory: 'Semua' }">
         <div class="container mx-auto px-4 lg:px-8">
 
-            {{-- Filter Tabs --}}
-            <div class="flex justify-center mb-12 gap-2 flex-wrap">
-                <a href="{{ route('public.potentials') }}"
-                    class="px-6 py-2 rounded-full text-sm font-bold transition {{ request()->routeIs('public.potentials') ? 'bg-emerald-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-gray-100' }}">Semua</a>
-                <a href="{{ route('public.potentials.category', 'wisata') }}"
-                    class="px-6 py-2 rounded-full text-sm font-bold transition {{ request()->is('*wisata*') ? 'bg-emerald-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-gray-100' }}">Wisata</a>
-                <a href="{{ route('public.potentials.category', 'umkm') }}"
-                    class="px-6 py-2 rounded-full text-sm font-bold transition {{ request()->is('*umkm*') ? 'bg-emerald-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-gray-100' }}">UMKM</a>
-                <a href="{{ route('public.potentials.category', 'produk') }}"
-                    class="px-6 py-2 rounded-full text-sm font-bold transition {{ request()->is('*produk*') ? 'bg-emerald-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-gray-100' }}">Produk</a>
-            </div>
+            {{-- FILTER --}}
+            @if (isset($categories) && $categories->count() > 0)
+                <div class="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in-up">
+                    <button @click="activeCategory = 'Semua'"
+                        :class="activeCategory === 'Semua' ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30' :
+                            'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
+                        class="px-5 py-2 rounded-full font-bold text-sm transition-all duration-300">
+                        Semua
+                    </button>
+                    @foreach ($categories as $cat)
+                        <button @click="activeCategory = '{{ $cat }}'"
+                            :class="activeCategory === '{{ $cat }}' ?
+                                'bg-amber-500 text-white shadow-lg shadow-amber-500/30' :
+                                'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'"
+                            class="px-5 py-2 rounded-full font-bold text-sm transition-all duration-300">
+                            {{ ucfirst($cat) }}
+                        </button>
+                    @endforeach
+                </div>
+            @endif
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @forelse($potentials as $item)
-                    <div
-                        class="bg-white rounded-3xl overflow-hidden shadow-lg shadow-slate-200/50 border border-gray-100 hover:-translate-y-2 transition duration-300 group">
-                        <div class="relative h-64 overflow-hidden">
-                            {{-- PERBAIKAN: Gunakan $item->image --}}
-                            @if ($item->image)
-                                <img src="{{ asset('storage/' . $item->image) }}"
-                                    class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
-                            @else
-                                <div
-                                    class="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400 font-bold">
-                                    No Image
+            {{-- GRID --}}
+            @if (isset($potentials) && $potentials->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-fade-in-up animation-delay-500">
+                    @foreach ($potentials as $item)
+                        <article x-show="activeCategory === 'Semua' || activeCategory === '{{ $item->category }}'"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 transform scale-90"
+                            x-transition:enter-end="opacity-100 transform scale-100"
+                            class="group bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full">
+
+                            <div class="relative h-60 overflow-hidden">
+                                <div class="absolute inset-0 bg-slate-200 animate-pulse"></div>
+                                @if ($item->image_path)
+                                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->title }}"
+                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                @else
+                                    <div class="w-full h-full bg-slate-200 flex items-center justify-center text-slate-400">
+                                        <svg class="w-12 h-12 opacity-50" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                @endif
+
+                                <div class="absolute top-4 left-4 z-10">
+                                    <span
+                                        class="bg-amber-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow-lg">
+                                        {{ $item->category ?? 'Unggulan' }}
+                                    </span>
                                 </div>
-                            @endif
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-6">
-                                <span class="text-white text-sm">{{ Str::limit($item->description, 100) }}</span>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60">
+                                </div>
                             </div>
-                            <span
-                                class="absolute top-4 right-4 bg-white/90 backdrop-blur text-emerald-700 text-xs font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide">
-                                {{ $item->category }}
-                            </span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">{{ $item->title }}</h3>
-                            <p class="text-slate-500 text-sm line-clamp-2">{{ $item->description }}</p>
-                        </div>
-                    </div>
-                @empty
-                    <div class="col-span-3 text-center py-20">
-                        <div class="text-6xl mb-4">🌳</div>
-                        <h3 class="text-xl font-bold text-slate-600">Belum ada data potensi</h3>
-                        <p class="text-slate-400">Silakan kembali lagi nanti.</p>
-                    </div>
-                @endforelse
-            </div>
 
-            <div class="mt-12">
-                {{ $potentials->links() }}
-            </div>
+                            <div class="p-8 flex flex-col flex-1 relative">
+                                <div
+                                    class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left">
+                                </div>
+                                <h2
+                                    class="text-xl font-bold text-slate-800 mb-3 leading-snug group-hover:text-amber-600 transition-colors">
+                                    <a href="{{ route('public.potentials.show', $item->slug) }}">
+                                        {{ $item->title }}
+                                    </a>
+                                </h2>
+                                <p class="text-slate-500 text-sm line-clamp-3 mb-6 leading-relaxed flex-1">
+                                    {{ Str::limit(strip_tags($item->description), 100) }}
+                                </p>
+                                <div class="mt-auto pt-6 border-t border-slate-100">
+                                    <a href="{{ route('public.potentials.show', $item->slug) }}"
+                                        class="inline-flex items-center text-sm font-bold text-amber-600 hover:text-amber-700 transition group/link">
+                                        Lihat Detail
+                                        <svg class="w-4 h-4 ml-1 transform group-hover/link:translate-x-1 transition-transform"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+                {{-- Pagination --}}
+                <div class="mt-12 flex justify-center">
+                    {{ $potentials->links() }}
+                </div>
+            @else
+                <div
+                    class="bg-white rounded-[2rem] p-16 text-center shadow-xl shadow-slate-200/50 border border-slate-100 max-w-2xl mx-auto">
+                    <div class="text-7xl mb-6">🌾</div>
+                    <h3 class="text-2xl font-bold text-slate-700">Belum Ada Data Potensi</h3>
+                    <p class="text-slate-500 mt-3">Informasi mengenai potensi desa belum ditambahkan.</p>
+                </div>
+            @endif
+
         </div>
-    </section>
+    </div>
 @endsection

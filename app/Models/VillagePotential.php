@@ -11,10 +11,10 @@ class VillagePotential extends Model
 
     protected $fillable = [
         'title',
-        'category',    // Wisata, Produk, dll
+        'slug',
+        'category',    // <--- PENTING untuk filter
         'description',
-        'image',
-        'price',       // Opsional
-        'location',    // Opsional
+        'image_path',
+        'address',     // <--- PENTING untuk lokasi
     ];
 }

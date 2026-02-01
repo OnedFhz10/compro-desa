@@ -7,7 +7,6 @@
         <div class="flex justify-between items-center h-20">
 
             {{-- 1. LOGO AREA (KIRI) --}}
-            {{-- Wajib diberi width tetap (lg:w-[280px]) agar seimbang dengan sisi kanan --}}
             <div class="flex-shrink-0 flex items-center lg:w-[280px]">
                 <a href="{{ route('home') }}" class="flex items-center gap-3 group">
                     @if ($navProfile?->logo_path)
@@ -29,7 +28,6 @@
 
             {{-- 2. MENU DESKTOP (TENGAH - PERFECT CENTER) --}}
             <div class="hidden lg:flex flex-1 justify-center items-center">
-                {{-- Style Menu Bersih (Tanpa Background Abu) --}}
                 <div class="flex items-center gap-6">
 
                     {{-- Beranda --}}
@@ -75,6 +73,38 @@
                         </div>
                     </div>
 
+                    {{-- Dropdown Transparansi --}}
+                    <div class="relative group py-2">
+                        <button
+                            class="flex items-center gap-1 text-sm font-bold text-slate-600 hover:text-blue-600 focus:outline-none">
+                            Transparansi <svg class="w-3 h-3 opacity-50" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div
+                            class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top py-2 z-50">
+                            <a href="{{ route('public.transparency.apbdes') }}"
+                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 font-medium transition">Laporan
+                                APBDes</a>
+                            <a href="{{ route('public.transparency.realisasi') }}"
+                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 font-medium transition">Realisasi
+                                Anggaran</a>
+                            <a href="{{ route('public.transparency.laporan') }}"
+                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 font-medium transition">Laporan
+                                Kegiatan</a>
+                        </div>
+                    </div>
+
+                    {{-- MENU POTENSI (SINGLE LINK) --}}
+                    <a href="{{ route('public.potentials') }}"
+                        class="text-sm font-bold transition-all relative group py-2 {{ request()->routeIs('public.potentials*') ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' }}">
+                        Potensi
+                        <span
+                            class="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left {{ request()->routeIs('public.potentials*') ? 'scale-x-100' : '' }}"></span>
+                    </a>
+
                     {{-- Dropdown Informasi --}}
                     <div class="relative group py-2">
                         <button
@@ -100,58 +130,6 @@
                                 Foto</a>
                         </div>
                     </div>
-
-
-                    {{-- Dropdown Transparansi --}}
-                    <div class="relative group py-2">
-                        <button
-                            class="flex items-center gap-1 text-sm font-bold text-slate-600 hover:text-blue-600 focus:outline-none">
-                            Transparansi <svg class="w-3 h-3 opacity-50" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div
-                            class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top py-2 z-50">
-                            <a href="{{ route('public.transparency.apbdes') }}"
-                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 font-medium transition">Laporan
-                                APBDes</a>
-                            <a href="{{ route('public.transparency.realisasi') }}"
-                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 font-medium transition">Realisasi
-                                Anggaran</a>
-                            <a href="{{ route('public.transparency.laporan') }}"
-                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-blue-50 hover:text-blue-600 font-medium transition">Laporan
-                                Kegiatan</a>
-                        </div>
-                    </div>
-
-                    {{-- Dropdown Potensi --}}
-                    <div class="relative group py-2">
-                        <button
-                            class="flex items-center gap-1 text-sm font-bold text-slate-600 hover:text-blue-600 focus:outline-none">
-                            Potensi <svg class="w-3 h-3 opacity-50" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div
-                            class="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top py-2 z-50">
-                            <a href="{{ route('public.potentials') }}"
-                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 font-medium transition">Semua
-                                Potensi</a>
-                            <div class="border-t border-gray-100 my-1"></div>
-                            <a href="{{ route('public.potentials.category', 'wisata') }}"
-                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 font-medium transition">Wisata</a>
-                            <a href="{{ route('public.potentials.category', 'umkm') }}"
-                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 font-medium transition">UMKM</a>
-                            <a href="{{ route('public.potentials.category', 'produk') }}"
-                                class="block px-4 py-2 text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-600 font-medium transition">Produk
-                                Unggulan</a>
-                        </div>
-                    </div>
-
 
                     {{-- Dropdown Layanan --}}
                     <div class="relative group py-2">
@@ -189,7 +167,6 @@
             </div>
 
             {{-- 3. ACTIONS AREA (KANAN) --}}
-            {{-- Width disamakan dengan KIRI (w-[280px]) agar center seimbang --}}
             <div class="hidden lg:flex items-center justify-end gap-3 lg:w-[280px]">
 
                 {{-- Search Bar --}}
@@ -251,7 +228,7 @@
         <a href="{{ route('home') }}"
             class="block px-6 py-4 bg-gray-50 text-slate-900 font-bold border-b border-gray-100">Beranda</a>
 
-        {{-- Accordion Menu untuk Mobile --}}
+        {{-- Mobile Grid Menu --}}
         <div class="px-6 py-4">
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Menu Utama</h4>
             <div class="grid grid-cols-2 gap-3">
@@ -304,12 +281,10 @@
 </nav>
 
 <script>
-    // Script Toggle Mobile Menu
     document.getElementById('mobile-menu-btn').addEventListener('click', function() {
         document.getElementById('mobile-menu').classList.toggle('hidden');
     });
 
-    // Effect Glassmorphism saat scroll
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 10) {
