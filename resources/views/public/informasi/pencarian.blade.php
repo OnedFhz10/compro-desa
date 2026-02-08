@@ -130,7 +130,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach ($potentials as $item)
-                            <a href="{{ route('public.potentials') }}"
+                            <a href="{{ route('public.potentials.show', $item->slug) }}"
                                 class="flex bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md hover:border-emerald-200 transition group">
                                 {{-- Thumbnail Mini --}}
                                 <div class="w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-slate-100">

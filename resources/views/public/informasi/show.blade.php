@@ -3,17 +3,17 @@
 {{-- META DATA DINAMIS --}}
 @section('title', $post->title)
 @section('meta_description', Str::limit(strip_tags($post->content), 150))
-@if ($post->image)
-    @section('meta_image', asset('storage/' . $post->image))
+@if ($post->image_path)
+    @section('meta_image', asset('storage/' . $post->image_path))
 @endif
 
 @section('content')
     {{-- HEADER GAMBAR (Parallax Effect) --}}
     <div class="relative h-[400px] md:h-[500px] overflow-hidden">
         <div class="absolute inset-0 bg-slate-900/50 z-10"></div>
-        {{-- PERBAIKAN: Gunakan $post->image --}}
-        @if ($post->image)
-            <img src="{{ asset('storage/' . $post->image) }}" class="w-full h-full object-cover fixed-parallax">
+        
+        @if ($post->image_path)
+            <img src="{{ asset('storage/' . $post->image_path) }}" class="w-full h-full object-cover fixed-parallax" loading="eager">
         @else
             <div class="w-full h-full bg-slate-800 flex items-center justify-center">
                 <span class="text-white font-bold">No Image Available</span>
@@ -24,13 +24,13 @@
             class="absolute bottom-0 left-0 w-full z-20 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent pt-32 pb-10">
             <div class="container mx-auto px-4 lg:px-8 max-w-4xl">
                 <span
-                    class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                    class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block animate-fade-in-up">
                     {{ $post->category?->name ?? 'Berita' }}
                 </span>
-                <h1 class="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4 shadow-sm">
+                <h1 class="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4 shadow-sm animate-fade-in-up">
                     {{ $post->title }}
                 </h1>
-                <div class="flex items-center gap-6 text-slate-300 text-sm font-medium">
+                <div class="flex items-center gap-6 text-slate-300 text-sm font-medium animate-fade-in-up">
                     <span class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -48,6 +48,23 @@
                     </span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    {{-- BREADCRUMB --}}
+    <div class="bg-slate-50 border-b border-gray-200">
+        <div class="container mx-auto px-4 lg:px-8 py-3">
+            <nav class="flex text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="hover:text-blue-600 transition-colors">Beranda</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-400">Informasi</span>
+                <span class="mx-2">/</span>
+                <a href="{{ route('public.news.index') }}" class="hover:text-blue-600 transition-colors">
+                    {{ $post->category->name ?? 'Berita' }}
+                </a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900 font-medium">{{ Str::limit($post->title, 30) }}</span>
+            </nav>
         </div>
     </div>
 
@@ -92,10 +109,9 @@
                                 <a href="{{ route('public.news.show', $recent->slug) }}"
                                     class="group flex gap-4 items-start">
                                     <div class="w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden bg-slate-200">
-                                        {{-- PERBAIKAN: Gunakan $recent->image --}}
-                                        @if ($recent->image)
-                                            <img src="{{ asset('storage/' . $recent->image) }}"
-                                                class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                        @if ($recent->image_path)
+                                            <img src="{{ asset('storage/' . $recent->image_path) }}"
+                                                class="w-full h-full object-cover group-hover:scale-110 transition duration-500" loading="lazy">
                                         @else
                                             <div
                                                 class="w-full h-full flex items-center justify-center text-xs text-slate-400">
@@ -114,28 +130,10 @@
                             @endforeach
                         </div>
                         <div class="mt-6 pt-6 border-t border-gray-200 text-center">
-                            <a href="{{ route('public.news') }}"
+                            <a href="{{ route('public.news.index') }}"
                                 class="text-sm font-bold text-blue-600 hover:text-blue-700">Lihat Semua Berita &rarr;</a>
                         </div>
                     </div>
-
-                    {{-- Kategori Widget --}}
-                    @if (isset($categories) && $categories->count() > 0)
-                        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                            <h3
-                                class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2 border-l-4 border-emerald-500 pl-3">
-                                Kategori
-                            </h3>
-                            <div class="flex flex-wrap gap-2">
-                                @foreach ($categories as $cat)
-                                    <span
-                                        class="bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-emerald-100 hover:text-emerald-700 transition cursor-default">
-                                        {{ $cat->name }}
-                                    </span>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
 
                 </div>
             </div>

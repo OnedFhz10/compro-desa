@@ -28,6 +28,14 @@ class DashboardController extends Controller
         // 3. Ambil 3 Berita Terbaru
         $recentPosts = Post::with('category')->latest()->take(3)->get();
 
-        return view('admin.dashboard', compact('stats', 'recentLetters', 'recentPosts'));
+        // 4. Data Chart: Statistik Surat Berdasarkan Status
+        $letterChart = [
+            'pending'  => LetterRequest::where('status', 'pending')->count(),
+            'processed'=> LetterRequest::where('status', 'proses')->count(),
+            'finished' => LetterRequest::where('status', 'selesai')->count(),
+            'rejected' => LetterRequest::where('status', 'ditolak')->count(),
+        ];
+
+        return view('admin.dashboard', compact('stats', 'recentLetters', 'recentPosts', 'letterChart'));
     }
 }

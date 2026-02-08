@@ -21,6 +21,7 @@ return new class extends Migration
         $table->text('excerpt')->nullable(); // Ringkasan pendek
         $table->longText('content'); // Isi berita lengkap
         $table->boolean('is_published')->default(true);
+        $table->boolean('is_featured')->default(false); // Highlight Berita
         $table->date('published_at')->nullable();
         $table->timestamps();
     });

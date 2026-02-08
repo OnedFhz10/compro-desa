@@ -3,37 +3,35 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\PostCategory;
+use Illuminate\Support\Facades\DB;
 
 class PostCategorySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $categories = [
             [
                 'name' => 'Berita',
                 'slug' => 'berita',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'name' => 'Pengumuman',
                 'slug' => 'pengumuman',
-            ],
-            [
-                'name' => 'Agenda',
-                'slug' => 'agenda',
-            ],
-            [
-                'name' => 'Layanan',
-                'slug' => 'layanan',
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ];
 
-        foreach ($categories as $cat) {
-            // firstOrCreate: Cek apakah data sudah ada berdasarkan slug, jika belum buat baru
-            PostCategory::firstOrCreate(['slug' => $cat['slug']], $cat);
+        foreach ($categories as $category) {
+            $exists = DB::table('post_categories')
+                ->where('slug', $category['slug'])
+                ->exists();
+            
+            if (!$exists) {
+                DB::table('post_categories')->insert($category);
+            }
         }
     }
 }

@@ -11,24 +11,28 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Buat Role
-        Role::create(['name' => 'Super Admin']);  // ID 1
-        Role::create(['name' => 'Admin Konten']); // ID 2
+        // 1. Buat Role (hindari duplikat)
+        $superAdminRole = Role::firstOrCreate(['name' => 'Super Admin']);
+        $contentAdminRole = Role::firstOrCreate(['name' => 'Admin Konten']);
 
         // 2. Buat User Super Admin
-        User::create([
-            'role_id' => 1, // Super Admin
-            'name' => 'Administrator Desa',
-            'email' => 'admin@desa.id',
-            'password' => Hash::make('password123'), // Ganti nanti saat production!
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@desa.id'], // Cek berdasarkan email
+            [
+                'role_id' => $superAdminRole->id,
+                'name' => 'Administrator Desa',
+                'password' => Hash::make('password123'),
+            ]
+        );
 
         // 3. Buat User Admin Konten (Contoh)
-        User::create([
-            'role_id' => 2,
-            'name' => 'Penulis Berita',
-            'email' => 'penulis@desa.id',
-            'password' => Hash::make('password123'),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'penulis@desa.id'],
+            [
+                'role_id' => $contentAdminRole->id,
+                'name' => 'Penulis Berita',
+                'password' => Hash::make('password123'),
+            ]
+        );
     }
 }

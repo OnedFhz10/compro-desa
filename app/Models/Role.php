@@ -13,7 +13,7 @@ class Role extends Model
      * Kita memproteksi kolom ID agar tidak bisa diubah sembarangan.
      * Kolom lain (seperti 'name') boleh diisi massal.
      */
-    protected $guarded = ['id'];
+    protected $fillable = ['name', 'description'];
 
     /**
      * Relasi: Satu Role bisa dimiliki oleh banyak User.

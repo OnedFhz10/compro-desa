@@ -25,6 +25,17 @@
             </a>
         </div>
 
+        {{-- Validation Errors Alert --}}
+        @if ($errors->any())
+            <div class="mb-6 bg-red-600/20 border border-red-600 text-red-200 px-4 py-3 rounded-lg">
+                <ul class="list-disc list-inside text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             {{-- Kirim category slug kembali untuk redirect setelah save --}}
@@ -47,22 +58,14 @@
                                 class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg w-full p-2.5 focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
-                        {{-- KATEGORI (HIDDEN / OTOMATIS) --}}
-                        @if ($currentCategory)
-                            {{-- Jika kategori sudah terpilih dari URL, gunakan input hidden --}}
+                        {{-- KATEGORI (OTOMATIS DARI URL) --}}
+                        @if($currentCategory)
                             <input type="hidden" name="category_id" value="{{ $currentCategory->id }}">
+                        @elseif($categories && $categories->isNotEmpty())
+                            <input type="hidden" name="category_id" value="{{ $categories->first()->id }}">
                         @else
-                            {{-- Fallback: Jika diakses langsung tanpa parameter --}}
-                            <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-300">Kategori</label>
-                                <select name="category_id" required
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg w-full p-2.5">
-                                    <option value="">-- Pilih Kategori --</option>
-                                    @foreach ($categories as $cat)
-                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            {{-- Fallback jika tidak ada kategori sama sekali --}}
+                            <input type="hidden" name="category_id" value="1">
                         @endif
 
                         {{-- KONTEN EDITOR --}}
@@ -101,6 +104,12 @@
                                 <input type="checkbox" name="is_published" value="1" checked
                                     class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-500 rounded focus:ring-blue-600 focus:ring-2">
                                 <span class="ml-2 text-sm font-medium text-gray-300">Terbitkan Langsung?</span>
+                            </label>
+
+                            <label class="flex items-center cursor-pointer mt-3 pt-3 border-t border-gray-600">
+                                <input type="checkbox" name="is_featured" value="1"
+                                    class="w-4 h-4 text-orange-500 bg-gray-700 border-gray-500 rounded focus:ring-orange-500 focus:ring-2">
+                                <span class="ml-2 text-sm font-medium text-orange-300">Tandai Penting / Featured?</span>
                             </label>
                         </div>
 

@@ -22,12 +22,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // 1. Pagination agar menggunakan style Bootstrap (bukan Tailwind default)
-        Paginator::useBootstrap();
+        // 1. Pagination Default (Tailwind CSS)
+        // Paginator::useBootstrap();
 
-        // 2. View Composer: Kirim variable $profile ke SEMUA halaman di folder 'public'
-        // Jadi kamu tidak perlu memanggil VillageProfile::first() lagi di Controller.
-        View::composer('public.*', function ($view) {
+        // 2. View Composer: Kirim variable $profile ke SEMUA halaman di folder 'public' dan 'layouts'
+        View::composer(['public.*', 'layouts.*'], function ($view) {
             $view->with('profile', VillageProfile::first());
         });
     }

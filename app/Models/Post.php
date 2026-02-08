@@ -17,12 +17,14 @@ class Post extends Model
         'image_path', 
         'excerpt',
         'user_id',
-        'is_published'
+        'is_published',
+        'is_featured'
     ];
 
     // Tambahkan Casts agar is_published jadi boolean
     protected $casts = [
         'is_published' => 'boolean',
+        'is_featured' => 'boolean',
     ];
 
     public function category()

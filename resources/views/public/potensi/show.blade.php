@@ -8,7 +8,7 @@
         <div class="absolute inset-0 bg-slate-900">
             @if ($potential->image_path)
                 <img src="{{ asset('storage/' . $potential->image_path) }}" alt="{{ $potential->title }}"
-                    class="w-full h-full object-cover opacity-60 fixed-parallax">
+                    class="w-full h-full object-cover opacity-60 fixed-parallax" loading="eager">
             @else
                 <div class="w-full h-full bg-slate-800 opacity-50"></div>
             @endif
@@ -26,6 +26,19 @@
                     {{ $potential->title }}
                 </h1>
             </div>
+        </div>
+    </div>
+
+    {{-- BREADCRUMB --}}
+    <div class="bg-slate-50 border-b border-gray-200">
+        <div class="container mx-auto px-4 lg:px-8 py-3">
+            <nav class="flex text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="hover:text-blue-600">Beranda</a>
+                <span class="mx-2">/</span>
+                <a href="{{ route('public.potentials.index') }}" class="hover:text-blue-600">Potensi Desa</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900 font-medium">{{ Str::limit($potential->title, 30) }}</span>
+            </nav>
         </div>
     </div>
 
@@ -124,7 +137,7 @@
 
             {{-- Tombol Kembali --}}
             <div class="mt-12 text-center">
-                <a href="{{ route('public.potentials') }}"
+                <a href="{{ route('public.potentials.index') }}"
                     class="inline-flex items-center gap-2 text-slate-500 hover:text-amber-600 font-bold transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

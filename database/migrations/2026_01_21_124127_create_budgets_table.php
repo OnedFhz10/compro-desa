@@ -14,6 +14,7 @@ return new class extends Migration
     Schema::create('budgets', function (Blueprint $table) {
         $table->id();
         $table->integer('year');
+        $table->string('category')->default('apbdes'); // apbdes, realisasi, laporan
         $table->enum('type', ['income', 'expense']); // Pilihan: income / expense
         $table->decimal('amount', 15, 2); // Nominal uang (maks 15 digit)
         $table->string('description');

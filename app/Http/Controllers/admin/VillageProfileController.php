@@ -22,21 +22,35 @@ class VillageProfileController extends Controller
     public function update(Request $request)
     {
         $request->validate([
+            // Basic Info
             'village_name' => 'required|string|max:255',
+            'address'      => 'nullable|string',
+            'postal_code'  => 'nullable|string|max:10',
+            'district'     => 'nullable|string|max:100',
+            'regency'      => 'nullable|string|max:100',
+            'province'     => 'nullable|string|max:100',
+            'email'        => 'nullable|email',
+            'phone'        => 'nullable|string',
+            
+            // Content
             'history'      => 'nullable|string',
             'vision'       => 'nullable|string',
             'mission'      => 'nullable|string',
-            'address'      => 'nullable|string',
-            'email'        => 'nullable|email',
-            'phone'        => 'nullable|string',
+            
+            // Statistics
+            'population'   => 'nullable|integer|min:0',
+            'area_size'    => 'nullable|numeric|min:0',
+            'rt_count'     => 'nullable|integer|min:0',
+            'rw_count'     => 'nullable|integer|min:0',
+            
+            // Images
             'logo_path'    => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
-            'structure_image_path' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:5120',
         ]);
 
         $profile = VillageProfile::firstOrFail();
         
         // Ambil semua input kecuali file
-        $data = $request->except(['logo_path', 'structure_image_path']);
+        $data = $request->except(['logo_path']);
 
         // Handle Upload Logo
         if ($request->hasFile('logo_path')) {
@@ -44,14 +58,6 @@ class VillageProfileController extends Controller
                 Storage::disk('public')->delete($profile->logo_path);
             }
             $data['logo_path'] = $request->file('logo_path')->store('profile', 'public');
-        }
-
-        // Handle Upload Struktur
-        if ($request->hasFile('structure_image_path')) {
-            if ($profile->structure_image_path && Storage::disk('public')->exists($profile->structure_image_path)) {
-                Storage::disk('public')->delete($profile->structure_image_path);
-            }
-            $data['structure_image_path'] = $request->file('structure_image_path')->store('profile', 'public');
         }
 
         $profile->update($data);

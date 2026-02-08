@@ -14,6 +14,7 @@ return new class extends Migration
     Schema::create('village_institutions', function (Blueprint $table) {
         $table->id();
         $table->string('name'); // Contoh: BPD, Karang Taruna
+        $table->string('slug')->unique();
         $table->string('abbreviation')->nullable(); // Singkatan (Opsional)
         $table->text('description')->nullable(); // Tugas & Fungsi
         $table->string('image_path')->nullable(); // Logo Lembaga

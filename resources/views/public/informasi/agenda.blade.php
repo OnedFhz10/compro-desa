@@ -3,26 +3,27 @@
 @section('title', 'Agenda Kegiatan')
 
 @section('content')
-    {{-- 1. HERO HEADER --}}
-    <section class="relative bg-slate-900 h-[400px] flex items-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-emerald-900/30 z-10"></div>
-            <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2938&auto=format&fit=crop"
-                alt="Agenda Background" class="w-full h-full object-cover opacity-40">
-        </div>
+    {{-- 1. HERO HEADER (Refactored to Component) --}}
+    <x-hero 
+        title="Agenda Kegiatan" 
+        subtitle="Jadwal Desa"
+        image="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=60&w=1200&auto=format&fit=crop"
+    >
+        Jangan lewatkan berbagai kegiatan, musyawarah, dan acara penting yang akan dilaksanakan.
+    </x-hero>
 
-        <div class="container mx-auto px-4 lg:px-8 relative z-20 text-center pt-10">
-            <span class="text-emerald-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">Jadwal
-                Desa</span>
-            <h1
-                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
-                Agenda Kegiatan
-            </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
-                Jangan lewatkan berbagai kegiatan, musyawarah, dan acara penting yang akan dilaksanakan.
-            </p>
+    {{-- BREADCRUMB --}}
+    <div class="bg-slate-50 border-b border-gray-200">
+        <div class="container mx-auto px-4 lg:px-8 py-3">
+            <nav class="flex text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="hover:text-blue-600">Beranda</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-400">Informasi</span>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900 font-medium">Agenda Kegiatan</span>
+            </nav>
         </div>
-    </section>
+    </div>
 
     {{-- 2. LIST AGENDA --}}
     <div class="bg-gray-50 py-20 min-h-screen relative z-30 -mt-10 pt-10">

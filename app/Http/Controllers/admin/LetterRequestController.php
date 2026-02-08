@@ -23,7 +23,7 @@ class LetterRequestController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,diproses,selesai,ditolak',
+            'status' => 'required|in:pending,proses,selesai,ditolak',
             'admin_note' => 'nullable|string'
         ]);
 

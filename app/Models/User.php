@@ -21,6 +21,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Relasi ke Post
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
      * Helper untuk cek role user (contoh: $user->hasRole('Super Admin'))
      */
     public function hasRole($roleName)

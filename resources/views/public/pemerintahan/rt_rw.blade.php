@@ -7,18 +7,18 @@
     <section class="relative bg-slate-900 h-[400px] flex items-center overflow-hidden">
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-blue-900/30 z-10"></div>
-            <img src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=80&w=2922&auto=format&fit=crop"
-                alt="Background" class="w-full h-full object-cover opacity-40">
+            <img src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?q=60&w=1200&auto=format&fit=crop"
+                alt="Background" class="w-full h-full object-cover opacity-40" width="1200" height="400" loading="eager">
         </div>
 
         <div class="container mx-auto px-4 lg:px-8 relative z-20 text-center pt-10">
             <span
                 class="text-blue-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">Wilayah</span>
             <h1
-                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
+                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up">
                 Data RT & RW
             </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up">
                 Pemetaan administratif wilayah {{ $profile?->village_name ?? 'Desa' }} mulai dari Dusun hingga tingkat RT.
             </p>
         </div>

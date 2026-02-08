@@ -12,17 +12,33 @@ return new class extends Migration
     public function up(): void
 {
     Schema::create('village_profiles', function (Blueprint $table) {
-        $table->id();
-        $table->string('village_name');
-        $table->text('history')->nullable(); // Pakai text agar muat banyak
-        $table->text('vision')->nullable();
-        $table->text('mission')->nullable();
-        $table->string('address')->nullable();
-        $table->string('email')->nullable();
-        $table->string('phone')->nullable();
-        $table->string('logo_path')->nullable(); // Menyimpan path gambar
-        $table->string('structure_image')->nullable(); // Menyimpan path gambar struktur
-        $table->timestamps();
+            $table->id();
+            $table->string('village_name');
+            $table->text('history')->nullable(); 
+            $table->text('vision')->nullable();
+            $table->text('mission')->nullable();
+            
+            // SEO & Statistik
+            $table->text('meta_description')->nullable();
+            $table->string('meta_keywords')->nullable();
+            $table->integer('population')->nullable();
+            $table->decimal('area_size', 8, 2)->nullable();
+            $table->integer('rt_count')->nullable();
+            $table->integer('rw_count')->nullable();
+
+            // Kontak & Lokasi
+            $table->string('address')->nullable();
+            $table->string('postal_code', 10)->nullable();
+            $table->string('district')->nullable();
+            $table->string('regency')->nullable();
+            $table->string('province')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            
+            // Assets
+            $table->string('logo_path')->nullable();
+            $table->string('structure_image_path')->nullable();
+            $table->timestamps();
     });
 }
 

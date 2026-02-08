@@ -14,8 +14,10 @@ return new class extends Migration
     Schema::create('village_potentials', function (Blueprint $table) {
         $table->id();
         $table->string('title'); // Nama Potensi (Misal: Keripik Pisang)
-        $table->string('category'); // UMKM, Pariwisata, Pertanian
+        $table->string('slug')->nullable();
+        $table->string('category')->default('Umum'); // UMKM, Pariwisata, Pertanian
         $table->text('description');
+        $table->string('address')->nullable();
         $table->string('image_path')->nullable();
         $table->text('location_link')->nullable(); // Link Google Maps
         $table->timestamps();

@@ -85,7 +85,7 @@
                         Mohon maaf, data lengkap mengenai <strong>{{ $pageTitle }}</strong> sedang dalam proses
                         penyusunan oleh admin desa.
                     </p>
-                    <a href="{{ route('public.institutions') }}"
+                    <a href="{{ route('public.government.institutions') }}"
                         class="inline-block bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition">
                         Lihat Lembaga Lainnya
                     </a>

@@ -7,22 +7,35 @@
     <section class="relative bg-slate-900 h-[400px] flex items-center overflow-hidden">
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-blue-900/30 z-10"></div>
-            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2968&auto=format&fit=crop"
-                alt="Background" class="w-full h-full object-cover opacity-40">
+            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=60&w=1200&auto=format&fit=crop"
+                alt="Background" class="w-full h-full object-cover opacity-40" width="1200" height="400" loading="eager">
         </div>
 
         <div class="container mx-auto px-4 lg:px-8 relative z-20 text-center pt-10">
             <span
                 class="text-blue-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">Kemasyarakatan</span>
             <h1
-                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
+                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up">
                 Lembaga Desa
             </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up">
                 Mitra strategis pemerintah dalam pembangunan dan pemberdayaan masyarakat.
             </p>
         </div>
     </section>
+
+    {{-- BREADCRUMB --}}
+    <div class="bg-slate-50 border-b border-gray-200">
+        <div class="container mx-auto px-4 lg:px-8 py-3">
+            <nav class="flex text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="hover:text-blue-600">Beranda</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-400">Pemerintahan</span>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900 font-medium">Lembaga Desa</span>
+            </nav>
+        </div>
+    </div>
 
     {{-- 2. CONTENT LIST LEMBAGA --}}
     <div class="bg-gray-50 py-20 min-h-screen">
@@ -32,7 +45,7 @@
                 {{-- Menggunakan grid-cols-4 agar sama dengan Perangkat Desa --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     @foreach ($institutions as $item)
-                        <a href="{{ route('public.institution.show', Str::slug($item->name)) }}"
+                        <a href="{{ route('public.government.institutions.show', $item->slug) }}"
                             class="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition duration-300 border border-slate-100 flex flex-col items-center text-center relative overflow-hidden animate-fade-in-up">
 
                             {{-- Dekorasi Background Atas (PERSIS PERANGKAT) --}}

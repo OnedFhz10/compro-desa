@@ -4,25 +4,28 @@
 
 @section('content')
     {{-- 1. HERO HEADER --}}
-    <section class="relative bg-slate-900 h-[400px] flex items-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-blue-900/30 z-10"></div>
-            <img src="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?q=80&w=2932&auto=format&fit=crop"
-                alt="Pengumuman Background" class="w-full h-full object-cover opacity-40">
-        </div>
+    {{-- 1. HERO HEADER --}}
+    <x-hero 
+        title="Pengumuman Resmi" 
+        subtitle="Informasi Publik"
+        image="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?q=80&w=2932&auto=format&fit=crop"
+        height="h-[400px]"
+    >
+        Pemberitahuan penting, himbauan, dan informasi resmi dari pemerintah desa untuk masyarakat.
+    </x-hero>
 
-        <div class="container mx-auto px-4 lg:px-8 relative z-20 text-center pt-10">
-            <span class="text-blue-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">Informasi
-                Publik</span>
-            <h1
-                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
-                Pengumuman Resmi
-            </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
-                Pemberitahuan penting, himbauan, dan informasi resmi dari pemerintah desa untuk masyarakat.
-            </p>
+    {{-- BREADCRUMB --}}
+    <div class="bg-slate-50 border-b border-gray-200">
+        <div class="container mx-auto px-4 lg:px-8 py-3">
+            <nav class="flex text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="hover:text-blue-600">Beranda</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-400">Informasi</span>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900 font-medium">Pengumuman</span>
+            </nav>
         </div>
-    </section>
+    </div>
 
     {{-- 2. LIST PENGUMUMAN --}}
     <div class="bg-gray-50 py-20 min-h-screen relative z-30 -mt-10 pt-10">
@@ -46,10 +49,12 @@
                             {{-- Konten --}}
                             <div class="flex-1 flex flex-col justify-center">
                                 <div class="flex items-center gap-2 mb-2">
+                                    @if($post->is_featured)
                                     <span
                                         class="bg-red-100 text-red-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide border border-red-200">
                                         Penting
                                     </span>
+                                    @endif
                                     <span class="text-xs text-slate-400 flex items-center">
                                         <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">

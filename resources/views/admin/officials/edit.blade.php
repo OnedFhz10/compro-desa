@@ -43,6 +43,14 @@
                         class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                 </div>
 
+                {{-- No. HP --}}
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-300">No. HP / Telepon (Opsional)</label>
+                    <input type="text" name="phone" value="{{ $official->phone }}"
+                        class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        placeholder="Contoh: 081234567890">
+                </div>
+
                 {{-- Foto --}}
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-300">Ganti Foto (Opsional)</label>

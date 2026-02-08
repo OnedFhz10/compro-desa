@@ -6,19 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    {{-- GLOBAL DATA PROFIL DESA (Untuk SEO Header) --}}
+    {{-- GLOBAL DATA PROFIL DESA (Shared via AppServiceProvider) --}}
     @php
-        $globalProfile = \App\Models\VillageProfile::first();
-        $siteName = $globalProfile?->village_name ?? 'Desa Digital';
+        // Variable $profile already sent by AppServiceProvider
+        $siteName = $profile?->village_name ?? 'Desa Digital';
         // Default deskripsi jika di halaman tidak di-set
         $defaultDesc =
             'Website Resmi Pemerintah ' .
             $siteName .
             '. Pusat informasi, layanan mandiri, transparansi anggaran, dan potensi desa.';
         // Default image jika tidak ada foto berita
-        $defaultImage = $globalProfile?->logo_path
-            ? asset('storage/' . $globalProfile->logo_path)
-            : 'https://via.placeholder.com/1200x630.png?text=' . urlencode($siteName);
+        $defaultImage = $profile?->logo_path
+            ? asset('storage/' . $profile->logo_path)
+            : 'https://via.placeholder.com/1200x630.webp?text=' . urlencode($siteName); // Use WebP placeholder
     @endphp
 
     {{-- 1. SEO UTAMA --}}
@@ -43,17 +43,15 @@
     <meta name="twitter:image" content="@yield('meta_image', $defaultImage)">
 
     {{-- 4. FAVICON (Ikon di Tab Browser) --}}
-    @if ($globalProfile?->logo_path)
-        <link rel="icon" href="{{ asset('storage/' . $globalProfile->logo_path) }}" type="image/png">
+    @if ($profile?->logo_path)
+        <link rel="icon" href="{{ asset('storage/' . $profile->logo_path) }}" type="image/png">
     @endif
 
-    {{-- 5. NPROGRESS (Loading Indicator) --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" />
-
-    {{-- Google Fonts: Plus Jakarta Sans --}}
+    {{-- 5. OPTIMIZATION: Removed NProgress CDN for local performance or keep minimal --}}
+    {{-- Google Fonts: Plus Jakarta Sans (Reduced Weights: 400, 600, 700) --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
         rel="stylesheet">
 
     {{-- Vite Resource Loading --}}
@@ -63,29 +61,6 @@
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        /* Glassmorphism Navbar Helper */
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        /* Custom NProgress Color (Biru) */
-        #nprogress .bar {
-            background: #2563eb !important;
-            /* Tailwind Blue-600 */
-            height: 3px !important;
-        }
-
-        #nprogress .peg {
-            box-shadow: 0 0 10px #2563eb, 0 0 5px #2563eb !important;
-        }
-
-        #nprogress .spinner-icon {
-            border-top-color: #2563eb !important;
-            border-left-color: #2563eb !important;
         }
     </style>
 </head>
@@ -114,28 +89,6 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
         </svg>
     </button>
-
-    {{-- SCRIPT: NProgress & BackToTop --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-    <script>
-        // 1. Loading Indicator Logic
-        window.addEventListener('beforeunload', function() {
-            NProgress.start();
-        });
-        window.addEventListener('load', function() {
-            NProgress.done();
-        });
-
-        // 2. Back To Top Button Logic
-        const backToTopBtn = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.remove('opacity-0', 'invisible', 'translate-y-10');
-            } else {
-                backToTopBtn.classList.add('opacity-0', 'invisible', 'translate-y-10');
-            }
-        });
-    </script>
 
 </body>
 

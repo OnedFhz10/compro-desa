@@ -15,6 +15,8 @@ return new class extends Migration
         $table->id();
         $table->string('name');
         $table->string('position'); // Jabatan (Kepala Desa, Sekdes, dll)
+        $table->string('nip')->nullable();
+        $table->string('phone')->nullable();
         $table->string('image_path')->nullable();
         $table->integer('order_level')->default(1); // Untuk urutan tampilan (1 paling atas)
         $table->timestamps();

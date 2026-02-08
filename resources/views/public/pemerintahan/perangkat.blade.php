@@ -7,22 +7,35 @@
     <section class="relative bg-slate-900 h-[400px] flex items-center overflow-hidden">
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-blue-900/30 z-10"></div>
-            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=2940&auto=format&fit=crop"
-                alt="Background" class="w-full h-full object-cover opacity-40">
+            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=60&w=1200&auto=format&fit=crop"
+                alt="Background" class="w-full h-full object-cover opacity-40" width="1200" height="400" loading="eager">
         </div>
 
         <div class="container mx-auto px-4 lg:px-8 relative z-20 text-center pt-10">
             <span
                 class="text-blue-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">Pemerintahan</span>
             <h1
-                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
+                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up">
                 Perangkat Desa
             </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up">
                 Jajaran aparatur yang siap melayani masyarakat {{ $profile?->village_name ?? 'Desa' }} dengan sepenuh hati.
             </p>
         </div>
     </section>
+
+    {{-- BREADCRUMB --}}
+    <div class="bg-slate-50 border-b border-gray-200">
+        <div class="container mx-auto px-4 lg:px-8 py-3">
+            <nav class="flex text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="hover:text-blue-600 transition-colors">Beranda</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-400">Pemerintahan</span>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900 font-medium">Perangkat Desa</span>
+            </nav>
+        </div>
+    </div>
 
     {{-- 2. CONTENT LIST PERANGKAT --}}
     <div class="bg-gray-50 py-20 min-h-screen">
@@ -42,14 +55,16 @@
                             <div class="relative z-10 mb-6">
                                 <div
                                     class="w-40 h-40 rounded-full p-1.5 bg-white shadow-md border border-slate-200 group-hover:scale-105 transition-transform duration-300">
-                                    <div class="w-full h-full rounded-full overflow-hidden relative">
+                                    <div class="w-full h-full rounded-full overflow-hidden relative flex items-center justify-center bg-slate-100">
                                         {{-- LOGIKA GAMBAR (Sesuai kode asli Anda) --}}
                                         @if ($official->image_path)
                                             <img src="{{ asset('storage/' . $official->image_path) }}"
                                                 alt="{{ $official->name }}" class="w-full h-full object-cover">
                                         @else
-                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($official->name) }}&background=random&size=256"
-                                                alt="{{ $official->name }}" class="w-full h-full object-cover">
+                                            {{-- Fallback SVG Icon (Local) --}}
+                                            <svg class="w-20 h-20 text-slate-300" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
                                         @endif
                                     </div>
                                 </div>
@@ -68,10 +83,9 @@
                                 {{-- Garis Pembatas Kecil --}}
                                 <div class="w-10 h-1 bg-slate-200 mx-auto mb-4 rounded-full"></div>
 
-                                {{-- NIP / Kontak --}}
+                                {{-- NIP --}}
                                 @if ($official->nip)
-                                    <span
-                                        class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-mono rounded-full border border-slate-200">
+                                    <span class="inline-block px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-mono rounded-full border border-slate-200">
                                         NIP: {{ $official->nip }}
                                     </span>
                                 @endif

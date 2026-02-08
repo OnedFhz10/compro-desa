@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\VillageProfile;
+
 class AuthController extends Controller
 {
     // Tampilkan Form Login
     public function showLoginForm()
     {
-        return view('auth.login');
+        $profil = VillageProfile::first();
+        return view('auth.login', compact('profil'));
     }
 
     // Proses Login

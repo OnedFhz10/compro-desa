@@ -29,6 +29,8 @@ class VillageOfficialController extends Controller
             'name'        => 'required|string|max:255',
             'position'    => 'required|string|max:255',
             'order_level' => 'required|integer|min:1',
+            'nip'         => 'nullable|string|max:255',
+            'phone'       => 'nullable|string|max:20',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -52,6 +54,8 @@ class VillageOfficialController extends Controller
             'name'        => 'required|string|max:255',
             'position'    => 'required|string|max:255',
             'order_level' => 'required|integer|min:1',
+            'nip'         => 'nullable|string|max:255',
+            'phone'       => 'nullable|string|max:20',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 

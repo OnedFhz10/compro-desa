@@ -20,13 +20,21 @@ class ServiceController extends Controller
     {
         $request->validate([
             'nik' => 'required|numeric|digits:16',
-            'name' => 'required',
-            'phone' => 'required',
-            'letter_type' => 'required',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'letter_type' => ['required', \Illuminate\Validation\Rule::in([
+                'Surat Keterangan Domisili',
+                'Surat Keterangan Usaha',
+                'Surat Keterangan Tidak Mampu',
+                'Surat Pengantar KTP/KK',
+                'Surat Keterangan Kelahiran',
+                'Surat Keterangan Kematian'
+            ])],
+            'keperluan' => 'nullable|string',
         ]);
 
-        // Generate Kode Unik
-        $code = 'SRT-' . strtoupper(Str::random(6));
+        // Generate Tracking Code: SRT-Ymd-RAND (Contoh: SRT-231025-X7Z)
+        $code = 'SRT-' . date('ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 4));
 
         LetterRequest::create([
             'tracking_code' => $code,
@@ -38,7 +46,7 @@ class ServiceController extends Controller
             'status' => 'pending'
         ]);
 
-        return redirect()->route('public.layanan.status')
+        return redirect()->route('public.layanan.status', ['kode' => $code])
             ->with('success', 'Permohonan berhasil! Kode Resi Anda: ' . $code . '. Simpan kode ini untuk cek status.');
     }
 

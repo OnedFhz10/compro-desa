@@ -9,8 +9,8 @@
         <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-blue-900/30 z-10"></div>
             {{-- Menggunakan gambar random atau bisa diganti foto desa --}}
-            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2874&auto=format&fit=crop"
-                alt="Background" class="w-full h-full object-cover opacity-40">
+            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=60&w=1200&auto=format&fit=crop"
+                alt="Background" class="w-full h-full object-cover opacity-40" width="1200" height="400" loading="eager">
         </div>
 
         {{-- Judul Halaman --}}
@@ -18,10 +18,10 @@
             <span
                 class="text-blue-400 font-bold tracking-widest text-sm uppercase mb-2 block animate-fade-in-up">Pemerintahan</span>
             <h1
-                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up animation-delay-200">
+                class="text-4xl lg:text-5xl font-extrabold text-white mb-4 drop-shadow-lg animate-fade-in-up">
                 Struktur Organisasi
             </h1>
-            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+            <p class="text-slate-300 text-lg max-w-2xl mx-auto animate-fade-in-up">
                 Bagan tata kelola pemerintahan {{ $profile?->village_name ?? 'Desa' }} yang transparan.
             </p>
         </div>

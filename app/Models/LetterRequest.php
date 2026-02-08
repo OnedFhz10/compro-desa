@@ -10,14 +10,16 @@ class LetterRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',       // Jika login
-        'name',          // Nama pemohon
+        'user_id',
+        'tracking_code', // Sesuai migration
+        'name',
         'nik',
         'phone',
-        'letter_type',   // Jenis Surat (SKCK, Domisili, dll)
-        'status',        // pending, diproses, selesai, ditolak
-        'attachment',    // File pendukung (KTP/KK)
-        'admin_note',    // Catatan dari admin
+        'letter_type',
+        'keperluan',     // Sesuai migration
+        'status',
+        'attachment',
+        'admin_note',
     ];
     
     // Relasi ke User (Opsional)

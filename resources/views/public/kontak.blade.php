@@ -2,14 +2,14 @@
 @section('title', 'Hubungi Kami')
 @section('content')
 
-    {{-- HERO SECTION --}}
-    <div class="bg-slate-900 py-20 text-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div class="relative z-10">
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-white mb-4">Hubungi Kami</h1>
-            <p class="text-slate-300 text-lg">Kami siap melayani dan mendengar aspirasi Anda.</p>
-        </div>
-    </div>
+    {{-- HERO SECTION (Refactored to Component) --}}
+    <x-hero 
+        title="Hubungi Kami" 
+        subtitle="Layanan Tetap & Pengaduan"
+        image="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=60&w=1200&auto=format&fit=crop"
+    >
+        Kami siap melayani dan mendengar aspirasi Anda.
+    </x-hero>
 
     <div class="bg-gray-50 py-16 min-h-screen">
         <div class="container mx-auto px-4 lg:px-8">

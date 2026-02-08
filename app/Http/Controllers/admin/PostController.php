@@ -25,7 +25,7 @@ class PostController extends Controller
             });
         }
 
-        $posts = $query->paginate(10);
+        $posts = $query->paginate(10)->withQueryString();
         
         // PENTING: Variabel ini dikirim ke View index
         $activeCategory = $request->category ?? null;
@@ -67,6 +67,7 @@ class PostController extends Controller
         $data['user_id'] = Auth::id();
         $data['excerpt'] = Str::limit(strip_tags($request->content), 150);
         $data['is_published'] = $request->has('is_published');
+        $data['is_featured'] = $request->has('is_featured');
 
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('posts', 'public');
@@ -96,6 +97,7 @@ class PostController extends Controller
         $data = $request->except(['image']);
         $data['excerpt'] = Str::limit(strip_tags($request->content), 150);
         $data['is_published'] = $request->has('is_published');
+        $data['is_featured'] = $request->has('is_featured');
 
         if ($request->hasFile('image')) {
             if ($post->image_path && Storage::disk('public')->exists($post->image_path)) {
@@ -106,7 +108,8 @@ class PostController extends Controller
 
         $post->update($data);
 
-        return redirect()->route('admin.posts.index')->with('success', 'Data berhasil diperbarui!');
+        return redirect()->route('admin.posts.index', ['category' => $post->category->slug])
+            ->with('success', 'Data berhasil diperbarui!');
     }
 
     public function destroy(Post $post)
@@ -115,7 +118,9 @@ class PostController extends Controller
             Storage::disk('public')->delete($post->image_path);
         }
         
+        $categorySlug = $post->category->slug; // Simpan slug sebelum hapus
         $post->delete();
-        return redirect()->route('admin.posts.index')->with('success', 'Data dihapus.');
+        return redirect()->route('admin.posts.index', ['category' => $categorySlug])
+            ->with('success', 'Data dihapus.');
     }
 }
