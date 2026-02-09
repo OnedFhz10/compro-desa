@@ -95,36 +95,7 @@
         </div>
     </section>
 
-    {{-- 3. WIDGET LACAK LAYANAN --}}
-    <section class="mb-20 container mx-auto px-4 lg:px-8">
-        <div
-            class="bg-blue-50/50 border border-blue-100 p-6 lg:p-8 rounded-[2.5rem] flex flex-col lg:flex-row items-center gap-6 animate-fade-in-up animation-delay-400">
-            <div class="flex items-center gap-4 px-2 w-full lg:w-auto">
-                <div
-                    class="w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-600/30">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="font-extrabold text-slate-800 text-xl">Lacak Surat</h4>
-                    <p class="text-sm text-slate-500">Pantau status pengajuan surat anda secara realtime.</p>
-                </div>
-            </div>
 
-            <form action="{{ route('public.services.status') }}" method="GET"
-                class="flex-1 w-full flex flex-col sm:flex-row gap-3">
-                <input type="text" name="kode" placeholder="Masukkan Kode Resi / NIK Anda..." required
-                    class="w-full bg-white border border-slate-200 text-slate-700 text-base rounded-2xl px-6 py-4 focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition shadow-sm">
-                <button type="submit"
-                    class="bg-slate-900 hover:bg-slate-800 text-white font-bold px-10 py-4 rounded-2xl text-base transition shadow-lg whitespace-nowrap">
-                    Cek Status
-                </button>
-            </form>
-        </div>
-    </section>
 
     {{-- 4. SAMBUTAN KEPALA DESA --}}
     {{-- 4. SAMBUTAN KEPALA DESA --}}
@@ -263,34 +234,59 @@
     </section>
 
     {{-- 6. POTENSI DESA --}}
+    {{-- 6. POTENSI DESA --}}
     @if (isset($potentials) && $potentials->count() > 0)
         <section class="py-24 bg-white relative overflow-hidden border-t border-slate-100">
             <div class="container mx-auto px-4 lg:px-8 relative z-10">
-                <div class="text-center mb-16">
-                    <span class="text-blue-600 font-bold tracking-wider text-sm uppercase">Kekayaan Lokal</span>
-                    <h2 class="text-3xl lg:text-5xl font-extrabold text-slate-900 mt-3">Jelajahi Potensi Desa</h2>
+                <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                    <div>
+                        <span class="text-blue-600 font-bold tracking-wider text-sm uppercase">Kekayaan Lokal</span>
+                        <h2 class="text-3xl lg:text-4xl font-extrabold text-slate-900 mt-2">Jelajahi Potensi Desa</h2>
+                    </div>
+                    <a href="{{ route('public.potentials.index') }}"
+                        class="text-slate-600 font-bold hover:text-blue-600 transition flex items-center gap-2">
+                        Lihat Semua <span
+                            class="bg-blue-100 text-blue-600 w-6 h-6 rounded-full flex items-center justify-center text-xs border border-blue-200">&rarr;</span>
+                    </a>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     @foreach ($potentials as $item)
-                        <div class="group relative h-96 rounded-3xl overflow-hidden cursor-pointer shadow-xl shadow-slate-200/50">
-                            {{-- PERBAIKAN: Gunakan $item->image_path (sesuai Model) --}}
-                            @if ($item->image_path)
-                                <img src="{{ asset('storage/' . $item->image_path) }}" loading="lazy"
-                                    class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110">
-                            @else
-                                <div class="absolute inset-0 bg-slate-200 flex items-center justify-center text-slate-400">No Image</div>
-                            @endif
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition">
-                            </div>
-                            <div
-                                class="absolute bottom-0 left-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition duration-300 w-full">
+                        <div
+                            class="bg-white rounded-3xl overflow-hidden shadow-xl shadow-slate-200/60 border border-slate-100 hover:-translate-y-2 transition duration-300 group flex flex-col h-full">
+                            <div class="relative h-60 overflow-hidden bg-slate-100">
                                 <span
-                                    class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full mb-3 inline-block shadow-sm">
+                                    class="absolute top-4 left-4 bg-white/90 backdrop-blur text-blue-600 text-xs font-bold px-3 py-1 rounded-full z-10 shadow-sm uppercase border border-slate-200">
                                     {{ $item->category }}
                                 </span>
-                                <h3 class="text-2xl font-bold text-white mb-2 leading-tight">{{ $item->title }}</h3>
+                                @if ($item->image_path)
+                                    <img src="{{ asset('storage/' . $item->image_path) }}" loading="lazy"
+                                        class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-slate-400 font-bold">No Image</div>
+                                @endif
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
+                                <div class="flex items-center gap-2 text-xs text-slate-400 mb-3">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                        </path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    {{ Str::limit($item->address ?? 'Lokasi tidak tersedia', 30) }}
+                                </div>
+                                <h3
+                                    class="text-xl font-bold text-slate-800 mb-3 leading-snug group-hover:text-blue-600 transition line-clamp-2">
+                                    <a href="{{ route('public.potentials.show', $item->slug) }}">{{ $item->title }}</a>
+                                </h3>
+                                <p class="text-slate-500 text-sm line-clamp-3 mb-6 flex-grow leading-relaxed">
+                                    {{ Str::limit(strip_tags($item->description), 100) }}
+                                </p>
+                                <a href="{{ route('public.potentials.show', $item->slug) }}"
+                                    class="inline-flex items-center text-blue-600 font-bold text-sm hover:underline mt-auto">
+                                    Lihat Detail &rarr;
+                                </a>
                             </div>
                         </div>
                     @endforeach

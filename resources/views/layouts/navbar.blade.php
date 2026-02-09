@@ -72,22 +72,11 @@
                         </div>
                     </div>
 
-                    {{-- Dropdown Layanan --}}
-                    <div class="relative group">
-                        <button
-                            class="flex items-center gap-1 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider rounded-full text-slate-500 hover:text-slate-800 hover:bg-white/50 transition-all focus:outline-none">
-                            Layanan
-                            <svg class="w-3 h-3 opacity-40 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top py-1 z-50">
-                            <a href="{{ route('public.services.mail.index') }}" class="block px-4 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-blue-600 font-medium transition">Surat Online</a>
-                            <a href="{{ route('public.services.status') }}" class="block px-4 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-blue-600 font-medium transition">Cek Status</a>
-                            <div class="h-px bg-slate-100 my-1"></div>
-                            <a href="{{ route('public.services.complaints.index') }}" class="block px-4 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-blue-600 font-medium transition">Pengaduan</a>
-                        </div>
-                    </div>
+                    {{-- Statistik Desa --}}
+                    <a href="{{ route('public.statistics.index') }}"
+                        class="px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider rounded-full transition-all {{ request()->routeIs('public.statistics.index') ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500 hover:text-slate-800 hover:bg-white/50' }}">
+                        Statistik
+                    </a>
 
                     {{-- Dropdown Transparansi --}}
                     <div class="relative group">
@@ -225,21 +214,9 @@
                 </div>
             </div>
 
-            {{-- Accordion Layanan --}}
-            <div class="bg-gray-50 rounded-xl border border-gray-100 overflow-hidden">
-                <button @click="activeAccordion = activeAccordion === 'layanan' ? null : 'layanan'" 
-                    class="w-full flex justify-between items-center px-4 py-3 text-sm font-medium text-slate-700 hover:bg-white transition">
-                    <span>Layanan</span>
-                    <svg class="w-4 h-4 text-slate-400 transition-transform duration-300" 
-                        :class="activeAccordion === 'layanan' ? 'rotate-180' : ''" 
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div x-show="activeAccordion === 'layanan'" x-collapse class="bg-white border-t border-gray-100">
-                    <a href="{{ route('public.services.mail.index') }}" class="block px-4 py-2 text-xs text-slate-600 hover:text-blue-600">Surat Online</a>
-                    <a href="{{ route('public.services.status') }}" class="block px-4 py-2 text-xs text-slate-600 hover:text-blue-600">Cek Status Surat</a>
-                    <a href="{{ route('public.services.complaints.index') }}" class="block px-4 py-2 text-xs text-slate-600 hover:text-blue-600">Pengaduan Masyarakat</a>
-                </div>
-            </div>
+            <a href="{{ route('public.statistics.index') }}" class="block w-full text-center px-4 py-3 text-sm font-medium text-slate-700 bg-gray-50 hover:bg-white hover:text-blue-600 border border-gray-100 rounded-xl transition">
+                Statistik Desa
+            </a>
             
             <a href="{{ route('public.contact') }}" class="block w-full text-center px-4 py-3 text-sm font-medium text-slate-700 bg-gray-50 hover:bg-white hover:text-blue-600 border border-gray-100 rounded-xl transition">
                 Kontak Kami

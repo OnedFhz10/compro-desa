@@ -8,7 +8,7 @@ use App\Http\Controllers\InformationController; // News, Agenda, Gallery
 use App\Http\Controllers\GovernmentController;  // Structure, Officials, Institutions
 use App\Http\Controllers\PotentialController;   // Potentials
 use App\Http\Controllers\TransparencyController;// Budget/Reports
-use App\Http\Controllers\ServiceController;     // Mail, Complaints
+use App\Http\Controllers\StatisticController;   // Statistics
 
 // 2. Controller Admin & Auth
 use App\Http\Controllers\AuthController;
@@ -68,19 +68,8 @@ Route::controller(TransparencyController::class)->prefix('transparansi')->group(
     Route::get('/laporan', 'laporan')->name('public.transparency.reports');
 });
 
-// 6. LAYANAN MANDIRI
-Route::controller(ServiceController::class)->prefix('layanan')->group(function() {
-    // Surat Online
-    Route::get('/surat', 'indexSurat')->name('public.services.mail.index');
-    Route::post('/surat', 'storeSurat')->name('public.services.mail.store');
-    
-    // Cek Status
-    Route::get('/status', 'indexStatus')->name('public.services.status');
-    
-    // Pengaduan
-    Route::get('/pengaduan', 'indexPengaduan')->name('public.services.complaints.index');
-    Route::post('/pengaduan', 'storePengaduan')->name('public.services.complaints.store'); // Pastikan method storePengaduan ada
-});
+// 6. STATISTIK DESA
+Route::get('/statistik', [StatisticController::class, 'index'])->name('public.statistics.index');
 
 
 // ==========================================================
@@ -101,7 +90,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 // C. ROUTE ADMIN PANEL (Protected)
 // ==========================================================
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:Super Admin,Admin Konten'])->prefix('admin')->name('admin.')->group(function () {
     
     // 1. Dashboard
     Route::get('/dashboard', [Admin\DashboardController::class, 'index'])->name('dashboard');
@@ -127,6 +116,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         'users'         => Admin\UserController::class,
     ]);
 
-    // 5. Manajemen Layanan Surat (Admin)
-    Route::resource('letters', Admin\LetterRequestController::class)->except(['create', 'store', 'edit']); 
+    // 5. Data Statistik
+    Route::get('/statistics', [Admin\VillageStatisticController::class, 'index'])->name('statistics.index');
+    Route::put('/statistics/general', [Admin\VillageStatisticController::class, 'updateGeneral'])->name('statistics.updateGeneral');
+    Route::put('/statistics', [Admin\VillageStatisticController::class, 'update'])->name('statistics.update');
+
+ 
 });

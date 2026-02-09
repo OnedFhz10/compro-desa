@@ -21,8 +21,7 @@
             openGroup: '{{ 
                 request()->routeIs('admin.officials.*') || request()->routeIs('admin.institutions.*') || request()->routeIs('admin.neighborhoods.*') ? 'pemerintahan' : 
                 (request()->routeIs('admin.posts.*') || request()->routeIs('admin.agendas.*') || request()->routeIs('admin.galleries.*') ? 'informasi' : 
-                (request()->routeIs('admin.letters.*') || request()->routeIs('admin.complaints.*') || request()->routeIs('admin.faqs.*') ? 'layanan' : 
-                (request()->routeIs('admin.budgets.*') ? 'transparansi' : null))) 
+                (request()->routeIs('admin.budgets.*') ? 'transparansi' : null)) 
             }}' 
         }">
 
@@ -46,6 +45,15 @@
                 </path>
             </svg>
             <span class="font-medium">Identitas Desa</span>
+        </a>
+
+        {{-- DATA STATISTIK (Top Level) --}}
+        <a href="{{ route('admin.statistics.index') }}"
+            class="flex items-center px-4 py-3 rounded-xl transition-all duration-200 group {{ request()->routeIs('admin.statistics.*') ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:bg-slate-800 hover:text-white' }}">
+            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+            <span class="font-medium">Statistik Desa</span>
         </a>
 
         <div class="pt-4 pb-2">
@@ -79,6 +87,7 @@
                         <span class="w-1.5 h-1.5 rounded-full mr-3 {{ request()->routeIs('admin.neighborhoods.*') ? 'bg-blue-400' : 'bg-slate-600 group-hover:bg-white' }}"></span>
                         Data RT / RW
                     </a>
+
                 </div>
             </div>
 
@@ -117,36 +126,7 @@
                 </div>
             </div>
 
-            {{-- GROUP: LAYANAN --}}
-            <div class="mb-1">
-                <button @click="openGroup === 'layanan' ? openGroup = null : openGroup = 'layanan'"
-                    :class="openGroup === 'layanan' ? 'text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'"
-                    class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 group focus:outline-none">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        <span class="font-medium">Layanan</span>
-                    </div>
-                    <svg :class="openGroup === 'layanan' ? 'rotate-180' : ''" class="w-4 h-4 transition-transform duration-200 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div x-show="openGroup === 'layanan'" x-collapse x-cloak class="space-y-1 mt-1 pl-4 pr-2">
-                    <a href="{{ route('admin.letters.index') }}" class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ request()->routeIs('admin.letters.*') ? 'bg-blue-600/20 text-blue-400' : 'text-slate-500 hover:text-white hover:bg-slate-800' }}">
-                        <span class="w-1.5 h-1.5 rounded-full mr-3 {{ request()->routeIs('admin.letters.*') ? 'bg-blue-400' : 'bg-slate-600 group-hover:bg-white' }}"></span>
-                        Permohonan Surat
-                    </a>
-                    <a href="{{ Route::has('admin.complaints.index') ? route('admin.complaints.index') : '#' }}" class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ request()->routeIs('admin.complaints.*') ? 'bg-blue-600/20 text-blue-400' : 'text-slate-500 hover:text-white hover:bg-slate-800' }}">
-                        <span class="w-1.5 h-1.5 rounded-full mr-3 {{ request()->routeIs('admin.complaints.*') ? 'bg-blue-400' : 'bg-slate-600 group-hover:bg-white' }}"></span>
-                        Pengaduan Warga
-                    </a>
-                    <a href="{{ Route::has('admin.faqs.index') ? route('admin.faqs.index') : '#' }}" class="flex items-center px-4 py-2 text-sm rounded-lg transition-all duration-200 {{ request()->routeIs('admin.faqs.*') ? 'bg-blue-600/20 text-blue-400' : 'text-slate-500 hover:text-white hover:bg-slate-800' }}">
-                        <span class="w-1.5 h-1.5 rounded-full mr-3 {{ request()->routeIs('admin.faqs.*') ? 'bg-blue-400' : 'bg-slate-600 group-hover:bg-white' }}"></span>
-                        FAQ / Tanya Jawab
-                    </a>
-                </div>
-            </div>
+
 
             {{-- GROUP: TRANSPARANSI --}}
             <div class="mb-1">

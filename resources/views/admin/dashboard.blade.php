@@ -21,21 +21,6 @@
 
     {{-- STATISTIK KARTU --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {{-- Surat Pending --}}
-        <div class="group bg-gradient-to-br from-gray-800 to-gray-800 border border-gray-700 hover:border-yellow-500/50 rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-yellow-500/10 hover:-translate-y-1 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-24 h-24 bg-yellow-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-            <div class="relative flex items-center justify-between">
-                <div>
-                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">Permohonan Surat</p>
-                    <h3 class="text-3xl font-bold text-white">{{ $stats['pending_letters'] }}</h3>
-                    <span class="text-xs font-medium text-yellow-500 bg-yellow-500/10 px-2 py-0.5 rounded mt-2 inline-block">Pending</span>
-                </div>
-                <div class="p-3 bg-gray-700/50 rounded-xl text-yellow-500 group-hover:bg-yellow-500 group-hover:text-white transition-colors duration-300">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                </div>
-            </div>
-        </div>
-
         {{-- Total Berita --}}
         <div class="group bg-gradient-to-br from-gray-800 to-gray-800 border border-gray-700 hover:border-blue-500/50 rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-blue-500/10 hover:-translate-y-1 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
@@ -80,26 +65,26 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    {{-- CHARTS & QUICK ACTIONS --}}
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-        {{-- Chart: Letter Trends --}}
-        <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700 lg:col-span-2">
-            <h3 class="text-lg font-bold text-white mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
-                </svg>
-                Statistik Permohonan Surat (6 Bulan Terakhir)
-            </h3>
-            <div class="relative h-64 w-full">
-                <canvas id="letterTrendChart"></canvas>
+        {{-- Galeri --}}
+        <div class="group bg-gradient-to-br from-gray-800 to-gray-800 border border-gray-700 hover:border-pink-500/50 rounded-2xl p-6 shadow-lg transition-all duration-300 hover:shadow-pink-500/10 hover:-translate-y-1 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-pink-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+            <div class="relative flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">Galeri Foto</p>
+                    <h3 class="text-3xl font-bold text-white">{{ $stats['total_galleries'] }}</h3>
+                    <span class="text-xs font-medium text-pink-500 bg-pink-500/10 px-2 py-0.5 rounded mt-2 inline-block">Album</span>
+                </div>
+                <div class="p-3 bg-gray-700/50 rounded-xl text-pink-500 group-hover:bg-pink-500 group-hover:text-white transition-colors duration-300">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
             </div>
         </div>
+    </div>
 
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
         {{-- Quick Actions --}}
-        <div class="space-y-6">
-            {{-- Quick Actions Card --}}
+        <div class="lg:col-span-1 space-y-6">
             <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
                 <h3 class="text-lg font-bold text-white mb-4">Aksi Cepat</h3>
                 <div class="space-y-3">
@@ -110,15 +95,6 @@
                         <div>
                             <span class="block text-sm font-medium text-white group-hover:text-blue-400 transition-colors">Tulis Berita Baru</span>
                             <span class="block text-xs text-gray-400">Publikasikan informasi desa</span>
-                        </div>
-                    </a>
-                    <a href="{{ route('admin.letters.index') }}" class="flex items-center p-3 bg-gray-700/50 hover:bg-gray-700 rounded-lg transition group border border-transparent hover:border-gray-600">
-                        <div class="p-2 bg-yellow-500/20 text-yellow-400 rounded-lg mr-3 group-hover:bg-yellow-500 group-hover:text-white transition">
-                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        </div>
-                        <div>
-                            <span class="block text-sm font-medium text-white group-hover:text-yellow-400 transition-colors">Proses Surat</span>
-                            <span class="block text-xs text-gray-400">Cek permohonan masuk</span>
                         </div>
                     </a>
                      <a href="{{ route('admin.potentials.create') }}" class="flex items-center p-3 bg-gray-700/50 hover:bg-gray-700 rounded-lg transition group border border-transparent hover:border-gray-600">
@@ -132,60 +108,10 @@
                     </a>
                 </div>
             </div>
-            
-            {{-- Chart: Letter Status --}}
-            <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                <h3 class="text-lg font-bold text-white mb-4">Status Surat</h3>
-                <div class="relative h-48 w-full">
-                    <canvas id="letterStatusChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {{-- DAFTAR SURAT TERBARU --}}
-        <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 flex flex-col">
-            <div class="p-6 border-b border-gray-700">
-                <h3 class="text-lg font-bold text-white">Permohonan Surat Terbaru</h3>
-            </div>
-            <div class="p-6 flex-1">
-                <div class="space-y-4">
-                    @forelse($recentLetters as $letter)
-                        <div class="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg hover:bg-gray-700/60 transition border border-gray-700/50">
-                            <div>
-                                <p class="text-white font-medium text-sm">{{ $letter->name }}</p>
-                                <p class="text-xs text-gray-500 mt-0.5">{{ $letter->letter_type }}</p>
-                            </div>
-                            <div>
-                                @php
-                                    $statusColor = match($letter->status) {
-                                        'pending' => 'yellow',
-                                        'proses' => 'blue',
-                                        'selesai' => 'green',
-                                        default => 'red'
-                                    };
-                                @endphp
-                                <x-ui.badge :color="$statusColor" :dot="true">{{ ucfirst($letter->status) }}</x-ui.badge>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="text-center py-6">
-                            <p class="text-gray-500 text-sm">Belum ada permohonan surat.</p>
-                        </div>
-                    @endforelse
-                </div>
-            </div>
-            <div class="p-4 border-t border-gray-700 bg-gray-800/50 rounded-b-xl text-center">
-                <a href="{{ route('admin.letters.index') }}" class="inline-flex items-center text-sm font-medium text-blue-400 hover:text-blue-300 transition">
-                    Lihat Semua Permohonan
-                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                </a>
-            </div>
         </div>
 
         {{-- BERITA TERBARU --}}
-        <div class="bg-gray-800 rounded-xl shadow-lg border border-gray-700 flex flex-col">
+        <div class="lg:col-span-2 bg-gray-800 rounded-xl shadow-lg border border-gray-700 flex flex-col">
             <div class="p-6 border-b border-gray-700">
                 <h3 class="text-lg font-bold text-white">Berita Terakhir Diterbitkan</h3>
             </div>
@@ -225,87 +151,4 @@
             </div>
         </div>
     </div>
-
-    {{-- CHART.JS SCIRPTS (Keeping existing logic) --}}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Data Status Surat
-            const letterData = @json($letterChart);
-            
-            // 1. Chart Status Distribusi (Doughnut)
-            const ctxStatus = document.getElementById('letterStatusChart').getContext('2d');
-            new Chart(ctxStatus, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Pending', 'Proses', 'Selesai', 'Ditolak'],
-                    datasets: [{
-                        data: [
-                            letterData.pending,
-                            letterData.processed,
-                            letterData.finished,
-                            letterData.rejected
-                        ],
-                        backgroundColor: [
-                            '#F59E0B', // Yellow
-                            '#3B82F6', // Blue
-                            '#10B981', // Green
-                            '#EF4444'  // Red
-                        ],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: { color: '#9CA3AF', font: { size: 10, family: 'sans-serif' }, boxWidth: 10 }
-                        }
-                    },
-                    cutout: '75%',
-                }
-            });
-
-            // 2. Chart Trend (Bar - Simulated Data)
-            const ctxTrend = document.getElementById('letterTrendChart').getContext('2d');
-            
-            // Simulasi data bulanan
-            const months = ['Sep', 'Okt', 'Nov', 'Des', 'Jan', 'Feb'];
-            const dataTrend = [12, 19, 15, 25, 22, {{ $stats['pending_letters'] + 15 }}]; 
-
-            new Chart(ctxTrend, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: 'Permohonan Surat',
-                        data: dataTrend,
-                        backgroundColor: '#3B82F6',
-                        borderRadius: 4,
-                        barThickness: 20
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: '#374151', drawBorder: false },
-                            ticks: { color: '#9CA3AF', font: { size: 11 } }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#9CA3AF', font: { size: 11 } }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
-        });
-    </script>
 @endsection

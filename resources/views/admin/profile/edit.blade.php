@@ -23,9 +23,7 @@
                     <button type="button" class="tab-btn px-4 py-2 text-sm font-medium rounded-t-lg" data-tab="identity">
                         🏛️ Identitas Desa
                     </button>
-                    <button type="button" class="tab-btn px-4 py-2 text-sm font-medium rounded-t-lg" data-tab="statistics">
-                        📊 Statistik
-                    </button>
+
                     <button type="button" class="tab-btn px-4 py-2 text-sm font-medium rounded-t-lg" data-tab="media">
                         🖼️ Media
                     </button>
@@ -136,50 +134,7 @@
                     </div>
                 </div>
 
-                {{-- TAB 3: STATISTIK DESA --}}
-                <div class="tab-content hidden" id="statistics">
-                    <div class="space-y-6">
-                        <h3 class="text-lg font-semibold text-white mb-4">Data Statistik Desa</h3>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-300">Jumlah Penduduk</label>
-                                <input type="number" name="population" value="{{ old('population', $profile->population ?? '') }}" min="0"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    placeholder="Contoh: 5000">
-                                <p class="text-xs text-gray-500 mt-1">Jumlah penduduk (jiwa)</p>
-                            </div>
-
-                            <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-300">Luas Wilayah (km²)</label>
-                                <input type="number" name="area_size" value="{{ old('area_size', $profile->area_size ?? '') }}" min="0" step="0.01"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    placeholder="Contoh: 12.50">
-                                <p class="text-xs text-gray-500 mt-1">Luas wilayah dalam kilometer persegi</p>
-                            </div>
-
-                            <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-300">Jumlah RT</label>
-                                <input type="number" name="rt_count" value="{{ old('rt_count', $profile->rt_count ?? '') }}" min="0"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    placeholder="Contoh: 25">
-                            </div>
-
-                            <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-300">Jumlah RW</label>
-                                <input type="number" name="rw_count" value="{{ old('rw_count', $profile->rw_count ?? '') }}" min="0"
-                                    class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    placeholder="Contoh: 8">
-                            </div>
-                        </div>
-
-                        <div class="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
-                            <p class="text-sm text-blue-300">
-                                💡 <strong>Info:</strong> Data statistik ini akan ditampilkan di halaman profil desa untuk memberikan gambaran umum kepada pengunjung.
-                            </p>
-                        </div>
-                    </div>
-                </div>
 
                 {{-- TAB 4: MEDIA --}}
                 <div class="tab-content hidden" id="media">

@@ -19,6 +19,15 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PostCategorySeeder::class,
             VillageProfileSeeder::class,
+            VillageOfficialSeeder::class,   // [NEW]
+            VillageInstitutionSeeder::class,// [NEW]
+            NeighborhoodSeeder::class,      // [NEW]
+            PostSeeder::class,              // [NEW]
+            GallerySeeder::class,           // [NEW]
+            AgendaSeeder::class,            // [NEW]
+            BudgetSeeder::class,            // [NEW]
+            FaqSeeder::class,               // [NEW]
+            VillagePotentialSeeder::class,
         ]);
     }
 }

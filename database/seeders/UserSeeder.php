@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             [
                 'role_id' => $superAdminRole->id,
                 'name' => 'Administrator Desa',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make(env('ADMIN_PASSWORD', 'password123')), // Gunakan ENV
             ]
         );
 
@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             [
                 'role_id' => $contentAdminRole->id,
                 'name' => 'Penulis Berita',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make(env('EDITOR_PASSWORD', 'password123')), // Gunakan ENV
             ]
         );
     }

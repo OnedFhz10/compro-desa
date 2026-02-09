@@ -31,6 +31,11 @@ class VillageProfile extends Model
         'area_size',          // Statistik (km²)
         'rt_count',           // Statistik
         'rw_count',           // Statistik
+        'boundary_north',
+        'boundary_south',
+        'boundary_east',
+        'boundary_west',
+        'total_families',
     ];
 
     /**

@@ -38,10 +38,17 @@ class VillageProfileController extends Controller
             'mission'      => 'nullable|string',
             
             // Statistics
-            'population'   => 'nullable|integer|min:0',
-            'area_size'    => 'nullable|numeric|min:0',
-            'rt_count'     => 'nullable|integer|min:0',
-            'rw_count'     => 'nullable|integer|min:0',
+            'population'      => 'nullable|integer|min:0',
+            'total_families'  => 'nullable|integer|min:0',
+            'area_size'       => 'nullable|numeric|min:0',
+            'rt_count'        => 'nullable|integer|min:0',
+            'rw_count'        => 'nullable|integer|min:0',
+
+            // Boundaries
+            'boundary_north'  => 'nullable|string|max:255',
+            'boundary_south'  => 'nullable|string|max:255',
+            'boundary_east'   => 'nullable|string|max:255',
+            'boundary_west'   => 'nullable|string|max:255',
             
             // Images
             'logo_path'    => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
